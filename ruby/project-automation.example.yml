@@ -1,5 +1,9 @@
-# Example configuration for Boardly.
+# Example configuration for Boardly (Ruby edition).
 # Copy to `.github/project-automation.yml` in your repo and adjust.
+#
+# This config is identical across both editions of Boardly:
+#   - Ruby port (this repo): https://github.com/cdrrazan/boardly-ruby
+#   - Main project (TypeScript): https://github.com/cdrrazan/Boardly
 
 project:
   owner: my-org        # org or user login that owns the Project (v2)

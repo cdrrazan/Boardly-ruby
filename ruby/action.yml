@@ -1,5 +1,8 @@
-name: "Boardly"
-description: "Config-driven automation for GitHub Projects (v2): sprint rollover, stale nudges, sub-issue gating, digests, standups, priority sort, and Slack/email notifications."
+# Boardly (Ruby edition) — Docker container action.
+# Ruby port:      https://github.com/cdrrazan/boardly-ruby
+# Main project:   https://github.com/cdrrazan/Boardly (TypeScript)
+name: "Boardly (Ruby)"
+description: "Config-driven automation for GitHub Projects (v2): sprint rollover, stale nudges, sub-issue gating, digests, standups, priority sort, and Slack/email notifications. Ruby port of cdrrazan/Boardly."
 author: "cdrrazan"
 branding:
   icon: "check-square"

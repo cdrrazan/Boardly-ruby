@@ -6,6 +6,17 @@ Because GitHub Actions has no native Ruby runtime, this ships as a **Docker cont
 
 > This folder is self-contained: copy its contents to the root of a new repository to publish it as its own action. In this repository it is published as [`cdrrazan/boardly-ruby`](https://github.com/cdrrazan/boardly-ruby).
 
+## 🔗 Related repositories
+
+Boardly is maintained in two editions that share the same config and behaviour:
+
+| Repo | Edition | Runtime |
+|------|---------|---------|
+| ⬆️ **[cdrrazan/Boardly](https://github.com/cdrrazan/Boardly)** — the **main project** | TypeScript | `node20` bundled action |
+| 💎 **[cdrrazan/boardly-ruby](https://github.com/cdrrazan/boardly-ruby)** — this repo | Ruby | Docker container action |
+
+Feature design and the roadmap are driven in the main project; this Ruby port is kept in parity and maintained alongside it. Issues and PRs specific to the Ruby edition are welcome here — anything cross-cutting is best raised upstream in [cdrrazan/Boardly](https://github.com/cdrrazan/Boardly).
+
 ## Features
 
 | Feature | What it does |
@@ -87,6 +98,8 @@ docker build -t boardly-rb .   # build the action image
 - **HTTP:** `Net::HTTP` (stdlib) for both GraphQL and REST — no Octokit dependency.
 - **Config validation:** hand-written to mirror the zod schema (same field names, same defaults, same error style).
 
+See the [main project](https://github.com/cdrrazan/Boardly) for the TypeScript edition.
+
 ## License
 
-[MIT](./LICENSE).
+[MIT](./LICENSE) — same as the [main Boardly project](https://github.com/cdrrazan/Boardly).
