@@ -31,7 +31,7 @@ Run these from the [`ruby/`](./ruby) folder.
 |---------|--------------|
 | `bundle exec rake test` | Run the Minitest suite (27 tests) |
 | `ruby -Ilib -Itest test/features_test.rb` | Run a single test file |
-| `docker build -t boardly-rb .` | Build the Docker action image |
+| `docker build -t boardly-ruby .` | Build the Docker action image |
 
 ## Project layout
 

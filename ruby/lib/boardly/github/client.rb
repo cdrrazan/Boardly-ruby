@@ -114,7 +114,7 @@ module Boardly
         uri = req.uri
         req["Authorization"] = "Bearer #{@token}"
         req["Accept"] = "application/vnd.github+json"
-        req["User-Agent"] = "boardly-rb"
+        req["User-Agent"] = "boardly-ruby"
         Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
       end
     end

@@ -223,7 +223,7 @@ The Ruby port lives in [`ruby/`](./ruby) and is self-contained — see [`ruby/RE
 cd ruby
 bundle install
 bundle exec rake test          # Minitest suite (27 tests)
-docker build -t boardly-rb .   # build the action image
+docker build -t boardly-ruby .   # build the action image
 ```
 
 **Built with:** Ruby 3.3 · standard library (HTTP/JSON/YAML) · `mail` gem (SMTP) · Minitest — see the full [**Tech Stack**](./TECH_STACK.md) and [**Architecture**](./docs/ARCHITECTURE.md).

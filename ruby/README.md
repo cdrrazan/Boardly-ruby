@@ -89,7 +89,7 @@ test/                     # Minitest specs + fake client/channel (27 tests)
 cd ruby
 bundle install
 bundle exec rake test          # or: ruby -Ilib -Itest test/features_test.rb
-docker build -t boardly-rb .   # build the action image
+docker build -t boardly-ruby .   # build the action image
 ```
 
 ## Notes vs. the TypeScript edition
