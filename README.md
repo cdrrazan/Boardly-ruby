@@ -33,7 +33,7 @@ This repository is the **official Ruby port** of Boardly. It ships as a **Docker
 > **Boardly** lives in two actively-maintained editions:
 >
 > - **[cdrrazan/Boardly](https://github.com/cdrrazan/Boardly)** — the original **TypeScript** action (`node20`). This is the **main project** where features and the roadmap are driven.
-> - **[cdrrazan/boardly-ruby](https://github.com/cdrrazan/boardly-ruby)** — this repo: a **full-Ruby** port shipped as a Docker container action.
+> - **[cdrrazan/Boardly-ruby](https://github.com/cdrrazan/Boardly-ruby)** — this repo: a **full-Ruby** port shipped as a Docker container action.
 >
 > Both editions read the **same** `.github/project-automation.yml` and produce the same behaviour, so you can switch between them without changing your config. We maintain the Ruby edition in parallel with the main project — issues and PRs for the Ruby port are welcome here.
 
@@ -111,7 +111,7 @@ flowchart TD
      automate:
        runs-on: ubuntu-latest   # Docker actions require a Linux runner
        steps:
-         - uses: cdrrazan/boardly-ruby@v1
+         - uses: cdrrazan/Boardly-ruby@v1
            with:
              token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
              config-path: .github/project-automation.yml
@@ -183,7 +183,7 @@ notifications:
 
 ```yaml
 # in your workflow — map the secrets into the environment
-- uses: cdrrazan/boardly-ruby@v1
+- uses: cdrrazan/Boardly-ruby@v1
   with:
     token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
   env:
@@ -205,7 +205,7 @@ Both channels are optional and independent — enable either, both, or neither. 
 
 Both editions are functionally equivalent and read the same config. They differ only in how they're built and run:
 
-| | 💎 This repo — [`cdrrazan/boardly-ruby`](https://github.com/cdrrazan/boardly-ruby) | ⬆️ Main repo — [`cdrrazan/Boardly`](https://github.com/cdrrazan/Boardly) |
+| | 💎 This repo — [`cdrrazan/Boardly-ruby`](https://github.com/cdrrazan/Boardly-ruby) | ⬆️ Main repo — [`cdrrazan/Boardly`](https://github.com/cdrrazan/Boardly) |
 |--|--|--|
 | Language | Ruby 3.x | TypeScript (strict) |
 | Runtime | **Docker container action** (`ruby:3.3` image) | **`node20`** bundled action |
@@ -223,7 +223,7 @@ The Ruby port lives in [`ruby/`](./ruby) and is self-contained — see [`ruby/RE
 cd ruby
 bundle install
 bundle exec rake test          # Minitest suite (27 tests)
-docker build -t boardly-ruby .   # build the action image
+docker build -t Boardly-ruby .   # build the action image
 ```
 
 **Built with:** Ruby 3.3 · standard library (HTTP/JSON/YAML) · `mail` gem (SMTP) · Minitest — see the full [**Tech Stack**](./TECH_STACK.md) and [**Architecture**](./docs/ARCHITECTURE.md).
