@@ -2,9 +2,9 @@
 
 A **full-Ruby** port of [Boardly](https://github.com/cdrrazan/Boardly) — a config-driven GitHub Action that automates **GitHub Projects (v2)**: sprint rollover, stale-card nudges, sub-issue gating, digests, standups, priority sorting, and Slack/email notifications, all from one YAML file.
 
-Because GitHub Actions has no native Ruby runtime, this ships as a **Docker container action** (a `ruby:3.3` image). Behaviour and config are identical to the TypeScript version.
+Because GitHub Actions has no native Ruby runtime, this ships as a **Docker container action** (a `ruby:3.3` image). Behaviour and config are identical to the TypeScript version, which is the main project — both editions are actively maintained.
 
-> This folder is self-contained: copy its contents to the root of a new repository to publish it as its own action.
+> This folder is self-contained: copy its contents to the root of a new repository to publish it as its own action. In this repository it is published as [`cdrrazan/boardly-ruby`](https://github.com/cdrrazan/boardly-ruby).
 
 ## Features
 
@@ -32,7 +32,7 @@ jobs:
   automate:
     runs-on: ubuntu-latest   # Docker actions require a Linux runner
     steps:
-      - uses: your-org/boardly-rb@v1
+      - uses: cdrrazan/boardly-ruby@v1
         with:
           token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
           config-path: .github/project-automation.yml

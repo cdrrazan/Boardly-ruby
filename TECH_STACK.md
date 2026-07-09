@@ -1,35 +1,38 @@
 # Tech Stack
 
-Boardly is two deliverables in one repository: the **GitHub Action** (the product) and the **marketing site** (`web/`). Everything is intentionally dependency-light.
+This repository is the **Ruby edition** of Boardly — the official Ruby port of the main project, [**cdrrazan/Boardly**](https://github.com/cdrrazan/Boardly) (TypeScript). It packages the GitHub Action as a Docker container and is intentionally dependency-light. The marketing site (`web/`) is shared with the main project.
 
-## 🤖 The Action
+> Looking for the TypeScript stack? See the [main repo's TECH_STACK](https://github.com/cdrrazan/Boardly/blob/main/TECH_STACK.md).
+
+## 🤖 The Action (Ruby)
 
 | Layer | Choice | Notes |
 |-------|--------|-------|
-| Language | **TypeScript** (strict, ES modules) | `tsconfig.json` with `strict`, `noUnusedLocals`, etc. |
-| Runtime | **Node.js ≥ 20** | Ships as a `node20` GitHub Action (`action.yml`) |
-| GitHub API | **`@octokit/graphql`** + **`@actions/github`** | Projects v2 via GraphQL; issues/comments via REST |
-| Action toolkit | **`@actions/core`** | Inputs, outputs, and the job-summary audit trail |
-| Config | **YAML** (`js-yaml`) validated with **Zod** | One `.github/project-automation.yml` file |
-| Email | **`nodemailer`** | SMTP delivery for digests/standups/alerts |
-| Slack | Native **`fetch`** | Incoming Webhook POST |
-| Bundler | **`@vercel/ncc`** | Compiles `src/` → a single committed `dist/index.js` |
-| Tests | **`node:test`** + **`tsx`** | 48 unit tests against a fake Octokit client |
-| Typecheck | **`tsc --noEmit`** | No runtime framework |
+| Language | **Ruby 3.x** (`frozen_string_literal`) | Targets Ruby ≥ 3.1; the action image pins `ruby:3.3` |
+| Runtime | **Docker container action** | Ships as a Docker action (`ruby/action.yml` → `ruby/Dockerfile`); Linux runners only |
+| GitHub API | **`Net::HTTP`** (stdlib) | Projects v2 via GraphQL; issues/comments via REST — no Octokit dependency |
+| Action I/O | Environment variables + job-summary file | Inputs mapped to `BOARDLY_*` env vars; audit trail written to `$GITHUB_STEP_SUMMARY` |
+| Config | **YAML** (stdlib `yaml`) with a hand-written validator | One `.github/project-automation.yml`, mirroring the TS zod schema |
+| Email | **`mail`** gem | SMTP delivery for digests/standups/alerts |
+| Slack | **`Net::HTTP`** | Incoming Webhook POST |
+| Tests | **Minitest** | 27 unit tests against a fake client/channel |
+| Task runner | **Rake** | `rake test` |
 
-**Source layout**
+**Source layout** (in [`ruby/`](./ruby))
 
 ```
-src/
-  index.ts            # entry point: inputs → config → fetch → dispatch → audit
-  config.ts           # Zod schema + YAML loader
-  types.ts            # normalized ProjectGraph / ProjectItem model
-  github/             # GraphQL docs, Octokit client, normalization
-  features/           # one file per feature (rollover, staleNudge, …)
-  notify/             # Slack + email channels + Notifier
-  util/               # audit trail, dates, field accessors
-test/                 # node:test specs + fake client helpers
-dist/                 # ncc bundle (committed — required for JS actions)
+lib/
+  boardly.rb              # entry point: inputs → config → fetch → dispatch → audit
+  boardly/
+    config.rb             # YAML load + validation (defaults match the TS zod schema)
+    model.rb              # normalized structs (ProjectGraph, ProjectItem, …)
+    github/               # GraphQL queries, Net::HTTP client, normalization
+    features/             # one module per feature (rollover, stale_nudge, …)
+    notify/               # Slack + email channels + Notifier
+    util/                 # dates + field accessors
+    audit.rb              # job-summary audit trail
+bin/boardly               # container entrypoint
+test/                     # Minitest specs + fake client/channel (27 tests)
 ```
 
 See [ARCHITECTURE.md](./docs/ARCHITECTURE.md) for how the pieces fit together.
@@ -46,18 +49,14 @@ See [ARCHITECTURE.md](./docs/ARCHITECTURE.md) for how the pieces fit together.
 
 ## 🔧 CI/CD & repo automation
 
-All via **GitHub Actions**:
-
-- **CI** (`ci.yml`) — typecheck + tests + build + `dist/` sync check
-- **PR checks** (`pr-checks.yml`) — tests/build/no-merge-conflicts gate
-- **PR lint** (`pr-lint.yml`) — Conventional Commit title check
-- **Major tag** (`major-tag.yml`) — moves the `v1` alias to the latest release
+Repo automation is driven by **GitHub Actions**, run against the Ruby suite (`bundle exec rake test`) and the Docker image build.
 
 ## Principles
 
-- **Minimal dependencies** — a handful of well-maintained libraries, no heavy frameworks.
+- **Minimal dependencies** — the standard library plus the `mail` gem; no heavy frameworks.
 - **No hosted infrastructure** — the Action runs inside the adopter's own GitHub; the site is static.
 - **Everything auditable** — the Action records every action; the site is fully client-side.
+- **Config parity** — the same `.github/project-automation.yml` runs on both the Ruby and TypeScript editions.
 
 ## License
 

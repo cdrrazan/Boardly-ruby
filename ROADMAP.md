@@ -52,8 +52,9 @@ Ideas we like but haven't committed to. Feedback especially welcome here.
 
 Not user-facing, but on the list.
 
-- ✅ CI + PR-checks + PR-lint workflows (typecheck, test, build, `dist/` sync, no merge conflicts, title lint).
+- ✅ CI running the Minitest suite (`bundle exec rake test`) + Docker image build on pull requests.
 - ✅ Published changelog + release automation (the `v1` alias auto-moves on publish).
+- 🔭 Keep behaviour and config in parity with the [main TypeScript project](https://github.com/cdrrazan/Boardly).
 - 🔭 Integration smoke test against a sandbox project in `dry-run`.
 - 💡 GitHub Marketplace listing.
 

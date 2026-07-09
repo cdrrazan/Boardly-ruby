@@ -2,6 +2,8 @@
 
 Boardly is **free and open source software**, released under the [MIT License](./LICENSE). It is built in the open, and it always will be.
 
+This repository is the **Ruby edition** of Boardly — the official Ruby port of the main project, [**cdrrazan/Boardly**](https://github.com/cdrrazan/Boardly) (TypeScript). Both editions are actively maintained.
+
 ## What this means for you
 
 - ✅ **Free to use** — personal, commercial, internal, or as part of a larger product.
@@ -28,11 +30,10 @@ Open source takes real time to maintain. If this project helps your team, you ca
 
 ## Third-party dependencies
 
-This project stands on other open-source work, including:
+The Ruby edition is deliberately dependency-light — it leans on the Ruby standard library for HTTP, JSON, and YAML, plus:
 
-- [`@actions/core`](https://github.com/actions/toolkit) & [`@actions/github`](https://github.com/actions/toolkit) (MIT)
-- [`@octokit/graphql`](https://github.com/octokit/graphql.js) (MIT)
-- [`js-yaml`](https://github.com/nodeca/js-yaml) (MIT)
-- [`zod`](https://github.com/colinhacks/zod) (MIT)
+- [`mail`](https://github.com/mikel/mail) (MIT) — SMTP delivery for the notifications feature
+- [`minitest`](https://github.com/minitest/minitest) (MIT) — test suite _(development)_
+- [`rake`](https://github.com/ruby/rake) (MIT) — task runner _(development)_
 
-Full dependency license texts are bundled in [`dist/licenses.txt`](./dist/licenses.txt) at build time. Thank you to all their maintainers. 🙏
+It also builds on the excellent [Ruby](https://www.ruby-lang.org/) language and standard library. Thank you to all their maintainers. 🙏

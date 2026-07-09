@@ -11,7 +11,7 @@ _Nothing yet._
 
 ## [1.0.0] — 2026-07-09
 
-First stable release: a config-driven GitHub Action for GitHub Projects (v2).
+First stable release of the **Ruby edition**: a full-Ruby port of [Boardly](https://github.com/cdrrazan/Boardly), shipped as a Docker container action for GitHub Projects (v2). Behaviour and config are identical to the TypeScript edition.
 
 ### Features
 - **Sprint rollover** — carry unfinished items into the next iteration.
@@ -28,11 +28,9 @@ First stable release: a config-driven GitHub Action for GitHub Projects (v2).
 - README, 13 use-case recipes, architecture, contributing, security, code of conduct, and roadmap.
 
 ### Tooling
-- **CI** — typecheck + tests + build + `dist/` sync check on pushes to `main`.
-- **PR checks** — gates pull requests on tests, build, `dist/` sync, and no merge conflicts, via an aggregate "PR ready to merge" status check.
-- **PR lint** — enforces Conventional Commit PR titles (blocking) and nudges for a triage label (advisory).
-- **Major-tag automation** — moves the `v1` alias to the latest release on publish.
-- Test suite of 48 unit tests covering feature logic, normalization, notifications, config, and util helpers.
+- **Docker container action** — packaged as a `ruby:3.3` image (`ruby/Dockerfile` + `ruby/action.yml`); no `dist/` bundle to commit.
+- **Minitest suite** of 27 unit tests covering feature logic, normalization, notifications, config, and util helpers — run with `bundle exec rake test`.
+- **CI** — runs the Ruby test suite and builds the action image on pull requests.
 
-[Unreleased]: https://github.com/cdrrazan/Boardly/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/cdrrazan/Boardly/releases/tag/v1.0.0
+[Unreleased]: https://github.com/cdrrazan/boardly-ruby/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/cdrrazan/boardly-ruby/releases/tag/v1.0.0

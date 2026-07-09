@@ -1,31 +1,41 @@
 <div align="center">
 
-# 🤖 Boardly
+# 🤖💎 Boardly (Ruby edition)
 
-### Put your GitHub Projects board on autopilot.
+### Put your GitHub Projects board on autopilot — now in Ruby.
 
 A config-driven GitHub Action that automates **GitHub Projects (v2)** — sprint rollover, stale-card nudges, sub-issue gating, digests, standups, priority sorting, and Slack/email notifications — all from one YAML file.
 
+This repository is the **official Ruby port** of Boardly. It ships as a **Docker container action** and is **byte-for-byte config compatible** with the original.
+
 <br/>
 
+[![Main project: cdrrazan/Boardly](https://img.shields.io/badge/Upstream-cdrrazan%2FBoardly-181717?logo=github&logoColor=white)](https://github.com/cdrrazan/Boardly)
 [![Website](https://img.shields.io/badge/Website-boardly.app.rsynk.com-6d8bff?logo=cloudflare&logoColor=white)](https://boardly.app.rsynk.com)
-[![CI](https://github.com/cdrrazan/Boardly/actions/workflows/ci.yml/badge.svg)](https://github.com/cdrrazan/Boardly/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/cdrrazan/Boardly?sort=semver&color=success)](https://github.com/cdrrazan/Boardly/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Made with TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Node](https://img.shields.io/badge/Node-%E2%89%A520-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Made with Ruby](https://img.shields.io/badge/Ruby-3.x-CC342D?logo=ruby&logoColor=white)](https://www.ruby-lang.org/)
+[![Docker action](https://img.shields.io/badge/GitHub%20Action-Docker-2496ED?logo=docker&logoColor=white)](./ruby/Dockerfile)
 [![GitHub Projects v2](https://img.shields.io/badge/GitHub-Projects%20v2-181717?logo=github&logoColor=white)](https://docs.github.com/issues/planning-and-tracking-with-projects)
-[![Tests](https://img.shields.io/badge/tests-48%20passing-brightgreen.svg)](./test)
+[![Tests](https://img.shields.io/badge/tests-27%20passing-brightgreen.svg)](./ruby/test)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](./CONTRIBUTING.md)
 [![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red.svg)](./OPEN_SOURCE.md)
 
-**[🌐 boardly.app.rsynk.com](https://boardly.app.rsynk.com)**
+**[🌐 boardly.app.rsynk.com](https://boardly.app.rsynk.com)** · **[⬆️ Main repo (TypeScript): cdrrazan/Boardly](https://github.com/cdrrazan/Boardly)**
 
-[Quick start](#-quick-start) · [Features](#-features) · [Use cases](#-use-cases) · [Config](#%EF%B8%8F-configuration) · [Roadmap](./ROADMAP.md) · [Contributing](./CONTRIBUTING.md) · [Sponsor](#-support-the-project)
+[Quick start](#-quick-start) · [Features](#-features) · [Use cases](#-use-cases) · [Config](#%EF%B8%8F-configuration) · [Ruby vs. TypeScript](#-ruby-edition-vs-typescript-edition) · [Roadmap](./ROADMAP.md) · [Contributing](./CONTRIBUTING.md) · [Sponsor](#-support-the-project)
 
 </div>
 
 ---
+
+> ### 💎 About this repository
+>
+> **Boardly** lives in two actively-maintained editions:
+>
+> - **[cdrrazan/Boardly](https://github.com/cdrrazan/Boardly)** — the original **TypeScript** action (`node20`). This is the **main project** where features and the roadmap are driven.
+> - **[cdrrazan/boardly-ruby](https://github.com/cdrrazan/boardly-ruby)** — this repo: a **full-Ruby** port shipped as a Docker container action.
+>
+> Both editions read the **same** `.github/project-automation.yml` and produce the same behaviour, so you can switch between them without changing your config. We maintain the Ruby edition in parallel with the main project — issues and PRs for the Ruby port are welcome here.
 
 ## ✨ What it does
 
@@ -33,7 +43,7 @@ You point the action at a Project (v2), describe your rules in `.github/project-
 
 ```mermaid
 flowchart LR
-    cron([⏰ Schedule / manual]) --> action[🤖 Boardly]
+    cron([⏰ Schedule / manual]) --> action[🤖 Boardly · Ruby]
     cfg[[📄 project-automation.yml]] --> action
     action -->|GraphQL| gh[(🗂️ GitHub Project v2)]
     gh --> action
@@ -61,7 +71,7 @@ flowchart LR
 
 ## 📚 Use cases
 
-Every feature comes with a standalone, copy-pasteable recipe — **who it's for**, the **config**, and **what happens**. Browse them all in [`docs/use-cases`](./docs/use-cases), or jump straight in:
+Every feature comes with a standalone, copy-pasteable recipe — **who it's for**, the **config**, and **what happens**. The config is identical across both editions, so these recipes apply verbatim. Browse them all in [`docs/use-cases`](./docs/use-cases), or jump straight in:
 
 | # | Use case | Feature(s) |
 |:--:|----------|-----------|
@@ -92,17 +102,23 @@ flowchart TD
 
 1. **Create a token.** The default `GITHUB_TOKEN` generally can't read org Projects. Create a fine-grained PAT or GitHub App token with **Projects: read & write** and **Issues: read & write**, and save it as a secret (e.g. `PROJECT_AUTOMATION_TOKEN`).
 
-2. **Add config** at `.github/project-automation.yml` — start from [`project-automation.example.yml`](./project-automation.example.yml).
+2. **Add config** at `.github/project-automation.yml` — start from [`ruby/project-automation.example.yml`](./ruby/project-automation.example.yml).
 
-3. **Add a workflow** — see [`.github/workflows/example.yml`](./.github/workflows/example.yml):
+3. **Add a workflow.** This edition is a **Docker container action**, so it must run on a **Linux runner**:
 
    ```yaml
-   - uses: cdrrazan/Boardly@v1
-     with:
-       token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
-       config-path: .github/project-automation.yml
-       dry-run: "true"   # preview first; remove once it looks right
+   jobs:
+     automate:
+       runs-on: ubuntu-latest   # Docker actions require a Linux runner
+       steps:
+         - uses: cdrrazan/boardly-ruby@v1
+           with:
+             token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
+             config-path: .github/project-automation.yml
+             dry-run: "true"   # preview first; remove once it looks right
    ```
+
+> **Prefer the TypeScript action?** Use [`cdrrazan/Boardly@v1`](https://github.com/cdrrazan/Boardly) instead — same inputs, same config, and it runs on any runner OS.
 
 > **Versioning:** pin to **`@v1`** to always get the latest `v1.x` (bug-fixes and features, no breaking changes), or **`@v1.0.0`** to freeze an exact version.
 
@@ -119,7 +135,7 @@ flowchart TD
 
 ## ⚙️ Configuration
 
-Everything is declared in one YAML file. Minimal example:
+Everything is declared in one YAML file, shared with the TypeScript edition. Minimal example:
 
 ```yaml
 project:
@@ -142,7 +158,7 @@ features:
         notify: assignees
 ```
 
-Full reference: [`project-automation.example.yml`](./project-automation.example.yml).
+Full reference: [`ruby/project-automation.example.yml`](./ruby/project-automation.example.yml).
 
 ## 📣 Notifications (Slack & email)
 
@@ -167,7 +183,7 @@ notifications:
 
 ```yaml
 # in your workflow — map the secrets into the environment
-- uses: cdrrazan/Boardly@v1
+- uses: cdrrazan/boardly-ruby@v1
   with:
     token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
   env:
@@ -185,23 +201,36 @@ Both channels are optional and independent — enable either, both, or neither. 
 - **Sub-issues** use the native GitHub sub-issues API (`subIssuesSummary`), requested with the `sub_issues` GraphQL feature header.
 - **Priority sort** uses `updateProjectV2ItemPosition`. Manual order only shows on a board view whose sort is set to **manual** — a field-sorted view overrides it.
 
+## 💎 Ruby edition vs. TypeScript edition
+
+Both editions are functionally equivalent and read the same config. They differ only in how they're built and run:
+
+| | 💎 This repo — [`cdrrazan/boardly-ruby`](https://github.com/cdrrazan/boardly-ruby) | ⬆️ Main repo — [`cdrrazan/Boardly`](https://github.com/cdrrazan/Boardly) |
+|--|--|--|
+| Language | Ruby 3.x | TypeScript (strict) |
+| Runtime | **Docker container action** (`ruby:3.3` image) | **`node20`** bundled action |
+| Runner OS | Linux only | Any (Linux/macOS/Windows) |
+| HTTP | `Net::HTTP` (stdlib) | `@octokit/graphql` + `@actions/github` |
+| Dependencies | stdlib + `mail` gem | `@actions/*`, `zod`, `js-yaml`, … |
+| Build step | none (image built at run) | committed `dist/` bundle (`ncc`) |
+| Config | **identical** `.github/project-automation.yml` | **identical** `.github/project-automation.yml` |
+
+The Ruby port lives in [`ruby/`](./ruby) and is self-contained — see [`ruby/README.md`](./ruby/README.md) for details specific to that folder.
+
 ## 🛠️ Development
 
 ```bash
-npm install
-npm run typecheck   # tsc --noEmit
-npm test            # unit tests (node:test + tsx)
-npm run build       # bundle src -> dist/index.js (committed; required for JS actions)
-npm run all         # typecheck + test + build
+cd ruby
+bundle install
+bundle exec rake test          # Minitest suite (27 tests)
+docker build -t boardly-rb .   # build the action image
 ```
 
-The bundled `dist/index.js` is committed so the action runs without a build step. Rebuild and commit it whenever you change `src/`.
-
-**Built with:** TypeScript · Node 20 · Octokit GraphQL · Zod · ncc — see the full [**Tech Stack**](./TECH_STACK.md) and [**Architecture**](./docs/ARCHITECTURE.md).
+**Built with:** Ruby 3.3 · standard library (HTTP/JSON/YAML) · `mail` gem (SMTP) · Minitest — see the full [**Tech Stack**](./TECH_STACK.md) and [**Architecture**](./docs/ARCHITECTURE.md).
 
 ## 🗺️ Roadmap
 
-Working-days awareness, escalation ladders, iteration auto-assignment, capacity warnings, and more — see [**ROADMAP.md**](./ROADMAP.md).
+Working-days awareness, escalation ladders, iteration auto-assignment, capacity warnings, and more — see [**ROADMAP.md**](./ROADMAP.md). The roadmap is shared with the [main project](https://github.com/cdrrazan/Boardly).
 
 ## 🤝 Contributing
 
@@ -209,7 +238,7 @@ Contributions are very welcome! Read the [**Contributing Guide**](./CONTRIBUTING
 
 ## ❤️ Support the project
 
-Boardly is free and open source. If it saves your team time, please consider sponsoring — it directly funds maintenance and new features.
+Boardly is free and open source. If it saves your team time, please consider sponsoring — it directly funds maintenance of both the TypeScript and Ruby editions.
 
 <div align="center">
 
