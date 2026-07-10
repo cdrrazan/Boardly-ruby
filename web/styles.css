@@ -186,6 +186,8 @@ code, .code { font-family: "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code
 .step h3 { font-size: 17px; margin-bottom: .3em; }
 .step p { color: var(--muted); font-size: 14.5px; margin: 0; }
 .step code, .step em { font-style: normal; }
+.how__more { text-align: center; margin-top: 34px; }
+.how__note { color: var(--muted); font-size: 14px; margin: 14px auto 0; max-width: 560px; }
 .step code { font-size: 12.5px; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; }
 .step em { color: var(--text); font-weight: 600; }
 

@@ -20,7 +20,7 @@
   <meta property="og:title" content="Boardly — Put your GitHub Projects board on autopilot" />
   <meta property="og:description" content="A free, open-source GitHub Action that automates GitHub Projects (v2) from one YAML file." />
   <meta property="og:image" content="./og.svg" />
-  <meta property="og:url" content="https://boardly.pages.dev/" />
+  <meta property="og:url" content="https://boardly-gh.pages.dev/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Boardly — GitHub Projects on autopilot" />
   <meta name="twitter:description" content="Sprint rollover, stale nudges, digests, standups, priority sorting & notifications — from one YAML file." />
@@ -42,12 +42,12 @@
         <a href="#how">How it works</a>
         <a href="#config">Config</a>
         <a href="#use-cases">Use cases</a>
-        <a href="https://github.com/cdrrazan/Boardly#readme" target="_blank" rel="noopener">Docs ↗</a>
+        <a href="https://github.com/cdrrazan/Boardly-ruby#readme" target="_blank" rel="noopener">Docs ↗</a>
       </nav>
 
       <div class="nav__actions">
         <a class="btn btn--ghost hide-sm" href="https://github.com/sponsors/cdrrazan" target="_blank" rel="noopener">Sponsor</a>
-        <a class="btn btn--primary" href="https://github.com/cdrrazan/Boardly" target="_blank" rel="noopener">
+        <a class="btn btn--primary" href="https://github.com/cdrrazan/Boardly-ruby" target="_blank" rel="noopener">
           <span class="gh-mark" aria-hidden="true"></span> Star on GitHub
         </a>
         <button class="icon-btn nav__burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false">
@@ -60,7 +60,7 @@
       <a href="#how">How it works</a>
       <a href="#config">Config</a>
       <a href="#use-cases">Use cases</a>
-      <a href="https://github.com/cdrrazan/Boardly#readme" target="_blank" rel="noopener">Docs ↗</a>
+      <a href="https://github.com/cdrrazan/Boardly-ruby#readme" target="_blank" rel="noopener">Docs ↗</a>
       <a href="https://github.com/sponsors/cdrrazan" target="_blank" rel="noopener">Sponsor</a>
     </div>
   </header>
@@ -71,7 +71,7 @@
       <div class="hero__glow" aria-hidden="true"></div>
       <div class="container hero__inner">
         <div class="hero__copy reveal">
-          <a class="pill" href="https://github.com/cdrrazan/Boardly/releases" target="_blank" rel="noopener">
+          <a class="pill" href="https://github.com/cdrrazan/Boardly-ruby/releases" target="_blank" rel="noopener">
             <span class="pill__dot"></span> Open source · MIT · v1.0
           </a>
           <h1 class="hero__title">Put your GitHub Projects board on <span class="grad">autopilot</span>.</h1>
@@ -81,7 +81,7 @@
             notifications — all from one YAML file.
           </p>
           <div class="hero__cta">
-            <a class="btn btn--primary btn--lg" href="https://github.com/cdrrazan/Boardly#-quick-start" target="_blank" rel="noopener">Get started free</a>
+            <a class="btn btn--primary btn--lg" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/GETTING_STARTED.md" target="_blank" rel="noopener">Get started free</a>
             <a class="btn btn--ghost btn--lg" href="#how">See how it works</a>
           </div>
           <ul class="hero__meta">
@@ -157,9 +157,13 @@
         <ol class="steps">
           <li class="step reveal"><span class="step__n">1</span><div><h3>Create a token</h3><p>A fine-grained PAT or App token with <em>Projects</em> + <em>Issues</em> access, stored as an encrypted secret.</p></div></li>
           <li class="step reveal"><span class="step__n">2</span><div><h3>Add your config</h3><p>Describe your rules in <code>.github/project-automation.yml</code> — start from the example and tweak.</p></div></li>
-          <li class="step reveal"><span class="step__n">3</span><div><h3>Add a workflow</h3><p>One <code>uses: cdrrazan/Boardly@v1</code> step on a cron. Run with <code>dry-run</code> first to preview.</p></div></li>
+          <li class="step reveal"><span class="step__n">3</span><div><h3>Add a workflow</h3><p>One <code>uses: cdrrazan/Boardly-ruby@v1</code> step on a cron (Linux runner). Run with <code>dry-run</code> first to preview.</p></div></li>
           <li class="step reveal"><span class="step__n">4</span><div><h3>Ship it</h3><p>Flip dry-run off. Boardly keeps your board honest on every schedule, and logs what it did.</p></div></li>
         </ol>
+        <div class="how__more reveal">
+          <a class="btn btn--ghost" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/GETTING_STARTED.md" target="_blank" rel="noopener">Full step-by-step guide ↗</a>
+          <p class="how__note">A linear, ~15-minute walkthrough you can do entirely from the GitHub web UI — including a quick 5-step install and an org rollout section.</p>
+        </div>
       </div>
     </section>
 
@@ -193,7 +197,7 @@
   <span class="c-k">automate</span>:
     <span class="c-k">runs-on</span>: ubuntu-latest
     <span class="c-k">steps</span>:
-      - <span class="c-k">uses</span>: cdrrazan/Boardly@v1
+      - <span class="c-k">uses</span>: cdrrazan/Boardly-ruby@v1
         <span class="c-k">with</span>:
           <span class="c-k">token</span>: <span class="c-s">${{ secrets.PROJECT_AUTOMATION_TOKEN }}</span>
         <span class="c-k">env</span>:
@@ -212,12 +216,12 @@
           <p class="lede">Thirteen copy-pasteable recipes in the docs — here are a few favorites.</p>
         </div>
         <div class="grid grid--uses">
-          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly/blob/main/docs/use-cases/01-sprint-rollover.md" target="_blank" rel="noopener"><h3>Carry work into the next sprint →</h3><p>Never hand-move unfinished tickets on Monday again.</p></a>
-          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly/blob/main/docs/use-cases/06-daily-standup.md" target="_blank" rel="noopener"><h3>Async daily standup →</h3><p>What moved yesterday, grouped by assignee — across time zones.</p></a>
-          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly/blob/main/docs/use-cases/13-notifications.md" target="_blank" rel="noopener"><h3>Digests in Slack &amp; inbox →</h3><p>Deliver sprint reports where your team already lives.</p></a>
-          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly/blob/main/docs/use-cases/08-dry-run-preview.md" target="_blank" rel="noopener"><h3>Preview safely with dry-run →</h3><p>See exactly what it would do before it does anything.</p></a>
-          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly/blob/main/docs/use-cases/03-sub-issue-gating.md" target="_blank" rel="noopener"><h3>Stop premature “Done” →</h3><p>Gate epics until every sub-issue is closed.</p></a>
-          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly/tree/main/docs/use-cases" target="_blank" rel="noopener"><h3>Browse all 13 recipes →</h3><p>The full cookbook in the repo docs.</p></a>
+          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/use-cases/01-sprint-rollover.md" target="_blank" rel="noopener"><h3>Carry work into the next sprint →</h3><p>Never hand-move unfinished tickets on Monday again.</p></a>
+          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/use-cases/06-daily-standup.md" target="_blank" rel="noopener"><h3>Async daily standup →</h3><p>What moved yesterday, grouped by assignee — across time zones.</p></a>
+          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/use-cases/13-notifications.md" target="_blank" rel="noopener"><h3>Digests in Slack &amp; inbox →</h3><p>Deliver sprint reports where your team already lives.</p></a>
+          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/use-cases/08-dry-run-preview.md" target="_blank" rel="noopener"><h3>Preview safely with dry-run →</h3><p>See exactly what it would do before it does anything.</p></a>
+          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/use-cases/03-sub-issue-gating.md" target="_blank" rel="noopener"><h3>Stop premature “Done” →</h3><p>Gate epics until every sub-issue is closed.</p></a>
+          <a class="usecard reveal" href="https://github.com/cdrrazan/Boardly-ruby/tree/main/docs/use-cases" target="_blank" rel="noopener"><h3>Browse all 13 recipes →</h3><p>The full cookbook in the repo docs.</p></a>
         </div>
       </div>
     </section>
@@ -236,8 +240,9 @@
             <li>48 unit tests &amp; CI gating every change</li>
           </ul>
           <div class="hero__cta">
-            <a class="btn btn--primary" href="https://github.com/cdrrazan/Boardly" target="_blank" rel="noopener">View source</a>
+            <a class="btn btn--primary" href="https://github.com/cdrrazan/Boardly-ruby" target="_blank" rel="noopener">View source</a>
             <a class="btn btn--ghost" href="https://github.com/sponsors/cdrrazan" target="_blank" rel="noopener">❤ Sponsor</a>
+            <a class="btn btn--ghost" href="https://buymemomo.com/rajan" target="_blank" rel="noopener">🥟 Buy me a Momo</a>
           </div>
         </div>
         <div class="os__stats reveal">
@@ -255,8 +260,8 @@
         <h2>Automate your board in minutes.</h2>
         <p>Point Boardly at a project, add a YAML file, and let it keep things tidy while you ship.</p>
         <div class="hero__cta">
-          <a class="btn btn--primary btn--lg" href="https://github.com/cdrrazan/Boardly#-quick-start" target="_blank" rel="noopener">Get started free</a>
-          <a class="btn btn--ghost btn--lg" href="https://github.com/cdrrazan/Boardly" target="_blank" rel="noopener">Star on GitHub</a>
+          <a class="btn btn--primary btn--lg" href="https://github.com/cdrrazan/Boardly-ruby/blob/main/docs/GETTING_STARTED.md" target="_blank" rel="noopener">Get started free</a>
+          <a class="btn btn--ghost btn--lg" href="https://github.com/cdrrazan/Boardly-ruby" target="_blank" rel="noopener">Star on GitHub</a>
         </div>
       </div>
     </section>
@@ -272,15 +277,16 @@
       <nav class="footer__cols" aria-label="Footer">
         <div><h4>Product</h4><a href="#features">Features</a><a href="#how">How it works</a><a href="#config">Config</a></div>
         <div><h4>Docs</h4>
-          <a href="https://github.com/cdrrazan/Boardly#readme" target="_blank" rel="noopener">README</a>
-          <a href="https://github.com/cdrrazan/Boardly/tree/main/docs/use-cases" target="_blank" rel="noopener">Use cases</a>
-          <a href="https://github.com/cdrrazan/Boardly/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
+          <a href="https://github.com/cdrrazan/Boardly-ruby#readme" target="_blank" rel="noopener">README</a>
+          <a href="https://github.com/cdrrazan/Boardly-ruby/tree/main/docs/use-cases" target="_blank" rel="noopener">Use cases</a>
+          <a href="https://github.com/cdrrazan/Boardly-ruby/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
         </div>
         <div><h4>Open source</h4>
-          <a href="https://github.com/cdrrazan/Boardly" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://github.com/cdrrazan/Boardly/blob/main/SECURITY.md" target="_blank" rel="noopener">Security</a>
-          <a href="https://github.com/cdrrazan/Boardly/blob/main/LICENSE" target="_blank" rel="noopener">License (MIT)</a>
+          <a href="https://github.com/cdrrazan/Boardly-ruby" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/cdrrazan/Boardly-ruby/blob/main/SECURITY.md" target="_blank" rel="noopener">Security</a>
+          <a href="https://github.com/cdrrazan/Boardly-ruby/blob/main/LICENSE" target="_blank" rel="noopener">License (MIT)</a>
           <a href="https://github.com/sponsors/cdrrazan" target="_blank" rel="noopener">Sponsor</a>
+          <a href="https://buymemomo.com/rajan" target="_blank" rel="noopener">Buy me a Momo</a>
         </div>
       </nav>
     </div>
