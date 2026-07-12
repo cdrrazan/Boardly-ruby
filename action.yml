@@ -18,7 +18,8 @@ inputs:
   only:
     description: >-
       Run a single feature instead of every enabled one. One of:
-      rollover, stale-nudge, sub-issue-gate, digest, standup, priority-sort.
+      rollover, sprint-start, sprint-runway, auto-assign, stale-nudge,
+      sub-issue-gate, digest, standup, priority-sort.
     required: false
     default: ""
   dry-run:

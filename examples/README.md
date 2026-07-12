@@ -28,7 +28,7 @@ What the config sets up:
 - **Digest** — posted to the standing "Sprint reports" issue (#128) at sprint end.
 - **Standup** — a fresh, labelled issue each run summarising the last 24h.
 - **Priority sort** — board ordered `Urgent → High → Medium → Low`.
-- **Slack** — digests, standups, and stale alerts mirrored to `#eng-board`.
+- **Slack + email** — digests, standups, and stale alerts mirrored to `#eng-board` and the team mailing list.
 
 ## Files
 

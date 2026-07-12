@@ -108,19 +108,19 @@ features:
     enabled: true
     order: ["Urgent", "High", "Medium", "Low"]
 
-# Mirror digests, standups, and stale alerts into #eng-board on Slack.
-# The webhook URL comes from the SLACK_WEBHOOK_URL secret (mapped in the
-# workflow's env:) — never inline it here.
+# Mirror digests, standups, and stale alerts into #eng-board on Slack and email.
+# Secrets are referenced BY ENV-VAR NAME (webhookEnv / userEnv / passwordEnv) and
+# supplied via the workflow's env: block — never inline the actual values here.
 notifications:
   slack:
     enabled: true
-    webhookEnv: SLACK_WEBHOOK_URL
+    webhookEnv: SLACK_WEBHOOK_URL      # workflow maps this to the real webhook secret
   email:
-    enabled: false
+    enabled: true
     host: smtp.postmarkapp.com
     port: 587
-    secure: false
-    userEnv: SMTP_USER
-    passwordEnv: SMTP_PASS
+    secure: false                      # true for port 465 (implicit TLS)
+    userEnv: SMTP_USER                 # env var holding the SMTP username
+    passwordEnv: SMTP_PASS             # env var holding the SMTP password
     from: "Nimbus Board Bot <board-bot@nimbus-labs.dev>"
     to: ["engineering@nimbus-labs.dev"]
