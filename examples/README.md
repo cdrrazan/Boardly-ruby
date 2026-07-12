@@ -6,7 +6,7 @@ reference, see [`project-automation.example.yml`](../project-automation.example.
 
 ## The scenario
 
-**Nimbus Labs** is a 5-person product team running two-week sprints on GitHub
+**Boardly Labs** is a 5-person product team running two-week sprints on GitHub
 Project #7. They want the board to run itself:
 
 | Person | Login | Area |
@@ -39,6 +39,6 @@ What the config sets up:
 
 ## Try it safely
 
-Copy both files into your repo, swap `nimbus-labs` / Project `7` / the logins
+Copy both files into your repo, swap `boardly-labs` / Project `7` / the logins
 for your own, then flip `dry-run: "true"` in the workflow for the first run —
 Boardly will log every action it *would* take without changing the board.

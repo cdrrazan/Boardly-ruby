@@ -1,7 +1,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Boardly — worked example config
 #
-# This is a *realistic, filled-in* setup for a fictional team (Nimbus Labs) so
+# This is a *realistic, filled-in* setup for a fictional team (Boardly Labs) so
 # you can see how the pieces fit together, not just the bare schema. For the
 # terse option-by-option reference, see project-automation.example.yml instead.
 #
@@ -14,9 +14,9 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 project:
-  owner: nimbus-labs      # the org that owns the board (github.com/orgs/nimbus-labs)
+  owner: boardly-labs      # the org that owns the board (github.com/orgs/boardly-labs)
   type: org
-  number: 7               # from the URL: /orgs/nimbus-labs/projects/7
+  number: 7               # from the URL: /orgs/boardly-labs/projects/7
 
 # The team renamed a couple of fields, so map the real names here.
 fields:
@@ -122,5 +122,5 @@ notifications:
     secure: false                      # true for port 465 (implicit TLS)
     userEnv: SMTP_USER                 # env var holding the SMTP username
     passwordEnv: SMTP_PASS             # env var holding the SMTP password
-    from: "Nimbus Board Bot <board-bot@nimbus-labs.dev>"
-    to: ["engineering@nimbus-labs.dev"]
+    from: "Boardly Board Bot <board-bot@boardly-labs.dev>"
+    to: ["engineering@boardly-labs.dev"]
