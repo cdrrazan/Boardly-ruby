@@ -23,7 +23,7 @@ What the config sets up:
 - **Sprint start** — cards pre-parked in `Backlog` are promoted to `Ready`.
 - **Sprint runway** — warns if fewer than 2 future sprints are planned.
 - **Auto-assign** — new `Ready` tickets are assigned by area label (`frontend` → Maya, etc.).
-- **Stale nudges** — `In Progress` after 4d, `In Review` after 2d (pings the reviewer too), `Blocked` after 1d (pings assignees **and** the PM).
+- **Stale nudges** — `In Progress` after 4d, `In Review` after 2d, `Blocked` after 1d — each pings the card's own assignees (dynamic, no hard-coded names).
 - **Sub-issue gate** — a parent can't sit in `Done`/`Released` while sub-issues are open; it's reverted to `In Progress`, and completion % is written to `Progress`.
 - **Digest** — posted to the standing "Sprint reports" issue (#128) at sprint end.
 - **Standup** — a fresh, labelled issue each run summarising the last 24h.
