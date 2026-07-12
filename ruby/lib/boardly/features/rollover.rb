@@ -32,6 +32,10 @@ module Boardly
         label_color = cfg.features[:rollover][:sprint_label_color]
         sprint_label = to.title # label named after the iteration items roll into
         ensured = {} # repos where the sprint label has been created this run
+        # Fuzzy label key: case-insensitive, ignoring spaces/hyphens/underscores, so a single
+        # "pulled-in" entry also matches "Pulled In", "pulled_in", etc. ("pull"/"pulled" differ.)
+        norm_label = ->(s) { s.to_s.downcase.gsub(/[^a-z0-9]+/, "") }
+        remove_norms = cfg.features[:rollover][:remove_labels].map { |l| norm_label.call(l) }
 
         graph.items.each do |item|
           it = Util::Project.iteration_of(item, cfg)
@@ -45,22 +49,32 @@ module Boardly
           ctx.audit.record("rollover", "move-iteration", label, "#{from.title} → #{to.title}#{status ? " (status: #{status})" : ""}")
           ctx.client.set_iteration(graph.id, item.id, field.id, to.id) unless ctx.dry_run
 
-          # Optionally tag the rolled item with the new sprint's label (additive;
-          # existing labels are kept). Draft items have no issue/PR to label.
-          next unless add_label && item.content
-
+          # Draft items have no issue/PR, so there is nothing to label.
           c = item.content
-          next if Array(c.labels).include?(sprint_label)
+          next unless c
 
-          ctx.audit.record("rollover", "add-label", label, "+#{sprint_label}")
-          next if ctx.dry_run
-
-          repo_key = "#{c.repo_owner}/#{c.repo_name}"
-          unless ensured[repo_key]
-            ctx.client.ensure_label(c.repo_owner, c.repo_name, sprint_label, label_color)
-            ensured[repo_key] = true
+          # Optionally tag the rolled item with the new sprint's label (additive; existing kept).
+          if add_label && !Array(c.labels).include?(sprint_label)
+            ctx.audit.record("rollover", "add-label", label, "+#{sprint_label}")
+            unless ctx.dry_run
+              repo_key = "#{c.repo_owner}/#{c.repo_name}"
+              unless ensured[repo_key]
+                ctx.client.ensure_label(c.repo_owner, c.repo_name, sprint_label, label_color)
+                ensured[repo_key] = true
+              end
+              ctx.client.add_labels(c.repo_owner, c.repo_name, c.number, [sprint_label])
+            end
           end
-          ctx.client.add_labels(c.repo_owner, c.repo_name, c.number, [sprint_label])
+
+          # Strip stale labels (e.g. "pulled-in") from each rolled card, any casing/spacing.
+          next if remove_norms.empty?
+
+          Array(c.labels).each do |existing|
+            next unless remove_norms.include?(norm_label.call(existing))
+
+            ctx.audit.record("rollover", "remove-label", label, "-#{existing}")
+            ctx.client.remove_label(c.repo_owner, c.repo_name, c.number, existing) unless ctx.dry_run
+          end
         end
       end
     end

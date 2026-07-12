@@ -56,7 +56,8 @@ module Boardly
           enabled: truthy(f.dig(:rollover, :enabled)),
           only_statuses: array_of_strings(f.dig(:rollover, :only_statuses) || f.dig(:rollover, :onlyStatuses), default: [], path: "rollover.onlyStatuses"),
           add_sprint_label: truthy(f.dig(:rollover, :add_sprint_label) || f.dig(:rollover, :addSprintLabel)),
-          sprint_label_color: validate_hex_color(f.dig(:rollover, :sprint_label_color) || f.dig(:rollover, :sprintLabelColor))
+          sprint_label_color: validate_hex_color(f.dig(:rollover, :sprint_label_color) || f.dig(:rollover, :sprintLabelColor)),
+          remove_labels: array_of_strings(f.dig(:rollover, :remove_labels) || f.dig(:rollover, :removeLabels), default: [], path: "rollover.removeLabels")
         },
         sprint_start: {
           enabled: truthy(f.dig(:sprint_start, :enabled) || f.dig(:sprintStart, :enabled)),

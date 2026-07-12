@@ -47,6 +47,19 @@ features:
 
 So when Sprint `2026-S05` closes into `2026-S06`, each carried-over card lands in the new iteration *and* gets the `2026-S06` label — no manual labelling, no label bookkeeping.
 
+## Stripping stale labels (e.g. `pulled-in`)
+
+Teams that tag mid-sprint pull-ins with a `pulled-in` label want it cleared when the work rolls into the next sprint. Add `removeLabels` and rollover strips those from every card it carries:
+
+```yaml
+features:
+  rollover:
+    enabled: true
+    removeLabels: ["pulled-in", "pull-in"]
+```
+
+Matching **ignores case and treats spaces, hyphens, and underscores as equivalent** — so a single `pulled-in` entry also clears `Pulled In`, `PULLED_IN`, `pulledin`, etc. Because `pull` and `pulled` are different words (they normalize differently), list both stems if your team uses both spellings — `["pulled-in", "pull-in"]` covers `pulled-in`, `pulled in`, `pull in`, and `pull-in` in any case. Labels you didn't list are never touched.
+
 ## Tips
 
 - Only want to roll certain columns? Set `onlyStatuses: ["In Progress", "Todo"]` — a card in "Blocked" then stays put for you to review.

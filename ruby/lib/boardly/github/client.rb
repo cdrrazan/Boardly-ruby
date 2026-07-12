@@ -3,6 +3,7 @@
 require "net/http"
 require "json"
 require "uri"
+require "erb"
 require_relative "queries"
 require_relative "normalize"
 require_relative "../model"
@@ -77,6 +78,11 @@ module Boardly
         rest(:post, "/repos/#{owner}/#{repo}/issues/#{issue_number}/labels", { labels: labels })
       end
 
+      # Remove a single label from an issue/PR by exact name.
+      def remove_label(owner, repo, issue_number, name)
+        rest(:delete, "/repos/#{owner}/#{repo}/issues/#{issue_number}/labels/#{ERB::Util.url_encode(name)}")
+      end
+
       # Assign users to an issue/PR. Additive — existing assignees are kept.
       # GitHub silently ignores logins that can't be assigned (non-collaborators).
       def add_assignees(owner, repo, issue_number, assignees)
@@ -112,10 +118,10 @@ module Boardly
       def rest(method, path, payload = nil)
         uri = URI("#{API}#{path}")
         resp =
-          if method == :get
-            request(Net::HTTP::Get.new(uri))
-          else
-            post_json(uri.to_s, payload, {})
+          case method
+          when :get then request(Net::HTTP::Get.new(uri))
+          when :delete then request(Net::HTTP::Delete.new(uri))
+          else post_json(uri.to_s, payload, {})
           end
         raise ApiError, "REST #{method.upcase} #{path} -> #{resp.code}: #{resp.body}" unless resp.is_a?(Net::HTTPSuccess)
 

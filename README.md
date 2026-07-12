@@ -60,7 +60,7 @@ flowchart LR
 
 | | Feature | What it does |
 |:--:|---------|--------------|
-| 🔁 | **Sprint rollover** | When an iteration ends, move unfinished items into the next iteration so nothing is stranded in a closed sprint. Optionally tag each rolled card with the new sprint's label (created if missing). |
+| 🔁 | **Sprint rollover** | When an iteration ends, move unfinished items into the next iteration so nothing is stranded in a closed sprint. Optionally tag each rolled card with the new sprint's label (created if missing) and strip stale labels like `pulled-in`. |
 | ▶️ | **Sprint start** | When a sprint becomes active, promote cards you pre-parked in it (e.g. **Backlog → Ready**). Only touches cards parked *before* the sprint started, so a deliberate mid-sprint move back is respected. |
 | 👤 | **Auto-assign by label** | A CODEOWNERS-style map from label → owner. Unassigned tickets in a status (e.g. Ready) get the configured assignee — `UI → @zach`, `security → @rajan`. Opt-in; never overrides an existing assignee. |
 | 🛬 | **Sprint runway warning** | GitHub never auto-creates iterations. Boardly warns (job summary + annotation) when too few future sprints are planned, so you add the next one before rollover/sprint-start run dry. |

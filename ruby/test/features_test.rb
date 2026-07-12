@@ -31,6 +31,23 @@ class FeaturesTest < Minitest::Test
     assert_equal 1, ctx.audit.count
   end
 
+  def test_rollover_strips_pulled_in_label_variants_keeps_others
+    cfg = make_config(features: { rollover: { enabled: true, remove_labels: ["pulled-in", "pull-in"] } })
+    fields = [status_field(%w[Todo Done]), iteration_field([{ id: "it2", title: "S6" }], [{ id: "it1", title: "S5" }])]
+    a = make_item([status_value("Todo", "2026-07-01T00:00:00Z"), iteration_value("it1", "S5")], { number: 1, labels: ["Pulled In", "keep"] })
+    b = make_item([status_value("Todo", "2026-07-01T00:00:00Z"), iteration_value("it1", "S5")], { number: 2, labels: ["pulled-in"] })
+    c = make_item([status_value("Todo", "2026-07-01T00:00:00Z"), iteration_value("it1", "S5")], { number: 3, labels: ["pull in"] })
+    d = make_item([status_value("Todo", "2026-07-01T00:00:00Z"), iteration_value("it1", "S5")], { number: 4, labels: ["PULL_IN"] })
+    client = FakeClient.new
+
+    Boardly::Features::Rollover.run(make_ctx(make_graph(fields, [a, b, c, d]), cfg, client))
+
+    assert_equal(
+      [{ number: 1, name: "Pulled In" }, { number: 2, name: "pulled-in" }, { number: 3, name: "pull in" }, { number: 4, name: "PULL_IN" }],
+      client.labels_removed
+    )
+  end
+
   def test_rollover_adds_sprint_label_once_per_repo_and_skips_already_labelled
     cfg = make_config(features: { rollover: { enabled: true, add_sprint_label: true, sprint_label_color: "772fd1" } })
     fields = [status_field(%w[Todo Done]), iteration_field([{ id: "it2", title: "2026-S06" }], [{ id: "it1", title: "2026-S05" }])]
