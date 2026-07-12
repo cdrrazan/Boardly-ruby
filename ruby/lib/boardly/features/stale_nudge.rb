@@ -58,9 +58,13 @@ module Boardly
         end
       end
 
+      # `notify` is either the literal "assignees" or a list of logins. Inside the
+      # list, an "assignees" entry expands to the item's assignees, so a rule can
+      # ping assignees *and* extra people (a reviewer, a project manager, …):
+      #   notify: [assignees, project-manager, some-reviewer]
       def resolve_mentions(notify, assignees)
-        logins = notify == "assignees" ? assignees : notify
-        logins.map { |l| "@#{l.sub(/\A@/, "")}" }.join(" ")
+        logins = notify == "assignees" ? assignees : notify.flat_map { |l| l == "assignees" ? assignees : l }
+        logins.map { |l| "@#{l.sub(/\A@/, "")}" }.uniq.join(" ")
       end
 
       def fill(template, vars)

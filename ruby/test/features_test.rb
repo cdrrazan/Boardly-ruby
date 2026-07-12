@@ -207,6 +207,19 @@ class FeaturesTest < Minitest::Test
     assert_match(/@alice/, client.comments[0][:body])
   end
 
+  def test_stale_nudge_notifies_assignees_plus_extra_logins
+    cfg = make_config(features: { stale_nudge: { enabled: true, rules: [{ status: "In Progress", days: 3, notify: ["assignees", "project-manager", "@alice"] }] } })
+    stale = make_item([status_value("In Progress", "2026-07-01T00:00:00Z")], { number: 5, assignees: ["alice"] })
+    client = FakeClient.new.with_comments([])
+
+    Boardly::Features::StaleNudge.run(make_ctx(make_graph([status_field(["In Progress"])], [stale]), cfg, client))
+
+    body = client.comments[0][:body]
+    assert_match(/@alice/, body)
+    assert_match(/@project-manager/, body)
+    assert_equal 1, body.scan("@alice").length, "assignee should not be mentioned twice"
+  end
+
   def test_stale_nudge_skips_when_marker_exists_for_stint
     cfg = make_config(features: { stale_nudge: { enabled: true, rules: [{ status: "In Progress", days: 3, notify: "assignees" }] } })
     stale = make_item([status_value("In Progress", "2026-07-01T00:00:00Z")], { number: 5, assignees: ["alice"] })
