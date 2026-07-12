@@ -148,6 +148,10 @@ code, .code { font-family: "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code
 .copy.copied { color: var(--brand-2); border-color: var(--brand-2); }
 .code { margin: 0; padding: 18px 20px; font-size: 13.5px; line-height: 1.7; overflow-x: auto; color: var(--text); }
 .code code { white-space: pre; }
+/* Blinking caret that rides the tail of the hero typewriter (main.js). */
+.code.typing::after { content: ""; display: inline-block; width: 7px; height: 1.05em; margin-left: 2px; vertical-align: text-bottom; background: var(--brand-2); animation: caret-blink 1.05s steps(1) infinite; }
+@keyframes caret-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .code.typing::after { display: none; } }
 .c-k { color: var(--c-key); } .c-s { color: var(--c-str); } .c-n { color: var(--c-num); } .c-b { color: var(--c-bool); } .c-c { color: var(--c-com); font-style: italic; }
 
 /* Marquee */
