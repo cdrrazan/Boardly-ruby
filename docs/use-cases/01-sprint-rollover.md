@@ -16,7 +16,9 @@ doneStatuses: ["Done", "Released"]
 features:
   rollover:
     enabled: true
-    onlyStatuses: []   # empty = every non-done item rolls over
+    onlyStatuses: []          # empty = every non-done item rolls over
+    addSprintLabel: false     # also tag each rolled card with the new sprint's label
+    sprintLabelColor: "772fd1" # color used if that label must be created
 ```
 
 Run it right after the iteration boundary:
@@ -31,8 +33,23 @@ on:
 
 When the action runs, it finds the **most recently completed** iteration and the **current active** one. Every item still assigned to the completed iteration that isn't in a `doneStatuses` column is moved to the current iteration. Done items are left behind (they belong to the finished sprint's record).
 
+## Tagging the new sprint with a label
+
+Some teams also track sprints with a plain issue **label** (e.g. `2026-S06`) so work can be filtered outside the board. Set `addSprintLabel: true` and rollover, in the same pass, adds a label **named after the iteration it moves cards into** to every card it rolls. If the repo doesn't have that label yet, Boardly creates it once (color `sprintLabelColor`, default `772fd1`). This is **additive** — existing labels like `pulled-in` are never removed, and a card that already carries the sprint label is skipped.
+
+```yaml
+features:
+  rollover:
+    enabled: true
+    addSprintLabel: true
+    sprintLabelColor: "772fd1"
+```
+
+So when Sprint `2026-S05` closes into `2026-S06`, each carried-over card lands in the new iteration *and* gets the `2026-S06` label — no manual labelling, no label bookkeeping.
+
 ## Tips
 
 - Only want to roll certain columns? Set `onlyStatuses: ["In Progress", "Todo"]` — a card in "Blocked" then stays put for you to review.
+- `sprintLabelColor` is a 6-digit hex **without** the leading `#`. It only applies the first time the label is created; an existing label keeps its color.
 - Pair with the [sprint digest](./05-sprint-digest.md) so the same run that carries work over also reports what got carried.
 - Test with `dry-run: "true"` first — see [use case 08](./08-dry-run-preview.md).

@@ -51,6 +51,7 @@ module Boardly
             updated_at: c["updatedAt"], repo_owner: c.dig("repository", "owner", "login"),
             repo_name: c.dig("repository", "name"),
             assignees: (c.dig("assignees", "nodes") || []).map { |a| a["login"] },
+            labels: (c.dig("labels", "nodes") || []).map { |l| l["name"] },
             sub_issues: sub_issues(c["subIssuesSummary"]),
             parent: c["parent"] && ParentRef.new(number: c["parent"]["number"], title: c["parent"]["title"], url: c["parent"]["url"])
           )

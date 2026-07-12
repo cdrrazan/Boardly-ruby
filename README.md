@@ -60,7 +60,7 @@ flowchart LR
 
 | | Feature | What it does |
 |:--:|---------|--------------|
-| 🔁 | **Sprint rollover** | When an iteration ends, move unfinished items into the next iteration so nothing is stranded in a closed sprint. |
+| 🔁 | **Sprint rollover** | When an iteration ends, move unfinished items into the next iteration so nothing is stranded in a closed sprint. Optionally tag each rolled card with the new sprint's label (created if missing). |
 | 🔔 | **Stale-card nudges** | @-mention owners when a card sits in a status past a threshold. De-duped so it never spams. |
 | 🧩 | **Sub-issue gating + roll-up** | Block a card from staying **Done** while it has open sub-issues; optionally write completion % into a progress field. |
 | 🏁 | **Sprint digest** | At iteration end, post completed-vs-carried-over counts and velocity. |

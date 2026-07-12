@@ -31,6 +31,33 @@ class FeaturesTest < Minitest::Test
     assert_equal 1, ctx.audit.count
   end
 
+  def test_rollover_adds_sprint_label_once_per_repo_and_skips_already_labelled
+    cfg = make_config(features: { rollover: { enabled: true, add_sprint_label: true, sprint_label_color: "772fd1" } })
+    fields = [status_field(%w[Todo Done]), iteration_field([{ id: "it2", title: "2026-S06" }], [{ id: "it1", title: "2026-S05" }])]
+    needs = make_item([status_value("Todo", "2026-07-01T00:00:00Z"), iteration_value("it1", "2026-S05")], { number: 1 })
+    labelled = make_item([status_value("Todo", "2026-07-01T00:00:00Z"), iteration_value("it1", "2026-S05")], { number: 2, labels: ["2026-S06"] })
+    client = FakeClient.new
+
+    Boardly::Features::Rollover.run(make_ctx(make_graph(fields, [needs, labelled]), cfg, client))
+
+    assert_equal 2, client.iterations.length
+    assert_equal [{ name: "2026-S06", color: "772fd1" }], client.ensured_labels
+    assert_equal [{ number: 1, labels: ["2026-S06"] }], client.labels_added
+  end
+
+  def test_rollover_label_add_dry_run_records_but_does_not_mutate
+    cfg = make_config(features: { rollover: { enabled: true, add_sprint_label: true } })
+    fields = [status_field(%w[Todo Done]), iteration_field([{ id: "it2", title: "S6" }], [{ id: "it1", title: "S5" }])]
+    item = make_item([status_value("Todo", "2026-07-01T00:00:00Z"), iteration_value("it1", "S5")], { number: 1 })
+    ctx = make_ctx(make_graph(fields, [item]), cfg, FakeClient.new, dry_run: true)
+
+    Boardly::Features::Rollover.run(ctx)
+
+    assert_equal 0, ctx.client.ensured_labels.length
+    assert_equal 0, ctx.client.labels_added.length
+    assert_equal 2, ctx.audit.count # move-iteration + add-label
+  end
+
   def test_stale_nudge_comments_and_mentions_assignees
     cfg = make_config(features: { stale_nudge: { enabled: true, rules: [{ status: "In Progress", days: 3, notify: "assignees" }] } })
     stale = make_item([status_value("In Progress", "2026-07-01T00:00:00Z")], { number: 5, assignees: ["alice"] })

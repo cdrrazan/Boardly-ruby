@@ -63,6 +63,20 @@ module Boardly
         graphql(Queries::SET_POSITION, { projectId: project_id, itemId: item_id, afterId: after_id })
       end
 
+      # Ensure a repo label exists, creating it with `color` (6-digit hex, no '#')
+      # if missing. An existing label is left untouched (its color is not changed).
+      def ensure_label(owner, repo, name, color)
+        rest(:post, "/repos/#{owner}/#{repo}/labels", { name: name, color: color })
+      rescue ApiError => e
+        # 422 = label already exists; anything else is a real failure.
+        raise unless e.message.include?("-> 422")
+      end
+
+      # Add labels to an issue/PR. Additive — labels already on the item are kept.
+      def add_labels(owner, repo, issue_number, labels)
+        rest(:post, "/repos/#{owner}/#{repo}/issues/#{issue_number}/labels", { labels: labels })
+      end
+
       def comment(owner, repo, issue_number, body)
         rest(:post, "/repos/#{owner}/#{repo}/issues/#{issue_number}/comments", { body: body })
       end

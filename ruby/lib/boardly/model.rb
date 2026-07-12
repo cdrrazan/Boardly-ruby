@@ -26,7 +26,7 @@ module Boardly
 
   IssueContent = Struct.new(
     :type, :node_id, :number, :title, :url, :state, :merged, :closed_at,
-    :updated_at, :repo_owner, :repo_name, :assignees, :sub_issues, :parent,
+    :updated_at, :repo_owner, :repo_name, :assignees, :labels, :sub_issues, :parent,
     keyword_init: true
   )
 

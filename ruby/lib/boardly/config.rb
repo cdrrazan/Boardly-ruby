@@ -54,7 +54,9 @@ module Boardly
       {
         rollover: {
           enabled: truthy(f.dig(:rollover, :enabled)),
-          only_statuses: array_of_strings(f.dig(:rollover, :only_statuses) || f.dig(:rollover, :onlyStatuses), default: [], path: "rollover.onlyStatuses")
+          only_statuses: array_of_strings(f.dig(:rollover, :only_statuses) || f.dig(:rollover, :onlyStatuses), default: [], path: "rollover.onlyStatuses"),
+          add_sprint_label: truthy(f.dig(:rollover, :add_sprint_label) || f.dig(:rollover, :addSprintLabel)),
+          sprint_label_color: validate_hex_color(f.dig(:rollover, :sprint_label_color) || f.dig(:rollover, :sprintLabelColor))
         },
         stale_nudge: {
           enabled: truthy(f.dig(:stale_nudge, :enabled) || f.dig(:staleNudge, :enabled)),
@@ -143,6 +145,16 @@ module Boardly
     def with_defaults(hash, defaults)
       h = (hash || {})
       defaults.each_with_object({}) { |(k, v), acc| acc[k] = h.fetch(k, v) }
+    end
+
+    def validate_hex_color(val)
+      return "772fd1" if val.nil?
+      s = val.to_s
+      unless s.match?(/\A[0-9a-fA-F]{6}\z/)
+        @errors << "rollover.sprintLabelColor: must be a 6-digit hex color without a leading '#'"
+        return "772fd1"
+      end
+      s
     end
 
     def array_of_strings(val, default:, path:)

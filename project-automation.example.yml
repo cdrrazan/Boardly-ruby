@@ -21,7 +21,9 @@ features:
   # Roll unfinished work from the just-ended iteration into the current one.
   rollover:
     enabled: true
-    onlyStatuses: []   # empty = every non-done item; or e.g. ["In Progress", "Todo"]
+    onlyStatuses: []          # empty = every non-done item; or e.g. ["In Progress", "Todo"]
+    addSprintLabel: false     # also add a label named after the new iteration (e.g. "2026-S06") to each rolled card
+    sprintLabelColor: "772fd1" # hex (no '#') used only if that label has to be created
 
   # Nudge owners when a card sits in a column too long.
   staleNudge:

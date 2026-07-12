@@ -55,12 +55,14 @@ class NormalizeTest < Minitest::Test
         "state" => "OPEN", "closedAt" => nil, "updatedAt" => "t",
         "repository" => { "owner" => { "login" => "acme" }, "name" => "repo" },
         "assignees" => { "nodes" => [{ "login" => "alice" }, { "login" => "bob" }] },
+        "labels" => { "nodes" => [{ "name" => "pulled-in" }, { "name" => "2026-S06" }] },
         "subIssuesSummary" => { "total" => 4, "completed" => 3, "percentCompleted" => 75 },
         "parent" => { "number" => 2, "title" => "Parent", "url" => "pu" }
       }
     )
     assert_equal "Issue", item.content.type
     assert_equal %w[alice bob], item.content.assignees
+    assert_equal ["pulled-in", "2026-S06"], item.content.labels
     assert_equal 75, item.content.sub_issues.percent_completed
     assert_equal 2, item.content.parent.number
   end

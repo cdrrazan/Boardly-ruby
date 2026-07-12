@@ -23,6 +23,7 @@ module Boardly
             id number title url state closedAt updatedAt
             repository { owner { login } name }
             assignees(first: 20) { nodes { login } }
+            labels(first: 30) { nodes { name } }
             subIssuesSummary { total completed percentCompleted }
             parent { number title url }
           }
@@ -30,6 +31,7 @@ module Boardly
             id number title url state merged closedAt updatedAt
             repository { owner { login } name }
             assignees(first: 20) { nodes { login } }
+            labels(first: 30) { nodes { name } }
           }
         }
       GQL
