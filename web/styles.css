@@ -169,7 +169,7 @@ code, .code { font-family: "SF Mono", ui-monospace, "JetBrains Mono", "Fira Code
 .grid { display: grid; gap: 20px; }
 .grid--features { grid-template-columns: repeat(4, 1fr); }
 .grid--code { grid-template-columns: 1fr 1fr; align-items: start; }
-.grid--uses { grid-template-columns: repeat(3, 1fr); }
+.grid--uses { grid-template-columns: repeat(4, 1fr); }
 
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
