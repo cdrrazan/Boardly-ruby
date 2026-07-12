@@ -120,6 +120,22 @@ class FeaturesTest < Minitest::Test
     assert_equal [{ number: 1, assignees: ["zach"] }, { number: 2, assignees: %w[zach rajan] }], client.assignees_added
   end
 
+  def test_auto_assign_matches_labels_case_insensitively
+    cfg = make_config(features: {
+      auto_assign: { enabled: true, only_statuses: ["Ready"], rules: [{ label: "uI", assignees: ["zach"] }] }
+    })
+    fields = [status_field(%w[Ready])]
+    # Rule says "uI"; board labels use assorted casings — all must match.
+    a = make_item([status_value("Ready", NOW.iso8601)], { number: 1, labels: ["UI"] })
+    b = make_item([status_value("Ready", NOW.iso8601)], { number: 2, labels: ["ui"] })
+    c = make_item([status_value("Ready", NOW.iso8601)], { number: 3, labels: ["Ui"] })
+    client = FakeClient.new
+
+    Boardly::Features::AutoAssign.run(make_ctx(make_graph(fields, [a, b, c]), cfg, client))
+
+    assert_equal [{ number: 1, assignees: ["zach"] }, { number: 2, assignees: ["zach"] }, { number: 3, assignees: ["zach"] }], client.assignees_added
+  end
+
   def test_auto_assign_dry_run_records_but_does_not_mutate
     cfg = make_config(features: {
       auto_assign: { enabled: true, only_statuses: ["Ready"], rules: [{ label: "UI", assignees: ["zach"] }] }

@@ -54,6 +54,7 @@ Chain it with [sprint start](./14-sprint-start.md): a sprint flips → `sprintSt
 
 ## Tips
 
+- **Label matching is case-insensitive.** `UI`, `ui`, `uI`, `Ui` in the config all match a board label of any casing — write it however you like.
 - `assignees` are GitHub **logins** (`zachgrande`), not display names ("Zach Grande"). A login that isn't a repo collaborator is silently ignored by GitHub.
 - Want it to also cover other columns? Widen `onlyStatuses: ["Ready", "Todo"]`, or set it to `[]` to consider every non-done ticket.
 - Multiple owners per label is fine — list them all under `assignees`.
