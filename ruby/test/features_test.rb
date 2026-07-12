@@ -58,6 +58,48 @@ class FeaturesTest < Minitest::Test
     assert_equal 2, ctx.audit.count # move-iteration + add-label
   end
 
+  def test_sprint_start_promotes_pre_parked_cards
+    cfg = make_config(features: { sprint_start: { enabled: true, from_statuses: ["Backlog"], to_status: "Ready" } })
+    # iteration_field start date is 2026-06-01, before NOW (2026-07-09) → the sprint has started.
+    fields = [status_field(%w[Backlog Ready Done]), iteration_field([{ id: "it1", title: "2026-S08" }], [])]
+    parked = make_item([status_value("Backlog", "2026-05-01T00:00:00Z"), iteration_value("it1", "2026-S08")], { number: 1 })
+    moved_back = make_item([status_value("Backlog", "2026-07-01T00:00:00Z"), iteration_value("it1", "2026-S08")], { number: 2 })
+    ready = make_item([status_value("Ready", "2026-05-01T00:00:00Z"), iteration_value("it1", "2026-S08")], { number: 3 })
+    client = FakeClient.new
+
+    Boardly::Features::SprintStart.run(make_ctx(make_graph(fields, [parked, moved_back, ready]), cfg, client))
+
+    assert_equal [{ item_id: parked.id, option_id: "opt-Ready" }], client.single_selects
+  end
+
+  def test_sprint_start_noop_before_iteration_starts
+    cfg = make_config(features: { sprint_start: { enabled: true } })
+    future = Boardly::ProjectField.new(
+      id: "F_sprint", name: "Sprint", data_type: "ITERATION",
+      iterations: [Boardly::IterationInfo.new(id: "it1", title: "2026-S09", start_date: "2026-08-01", duration: 14)],
+      completed_iterations: []
+    )
+    fields = [status_field(%w[Backlog Ready]), future]
+    parked = make_item([status_value("Backlog", "2026-05-01T00:00:00Z"), iteration_value("it1", "2026-S09")], { number: 1 })
+    client = FakeClient.new
+
+    Boardly::Features::SprintStart.run(make_ctx(make_graph(fields, [parked]), cfg, client))
+
+    assert_equal 0, client.single_selects.length
+  end
+
+  def test_sprint_start_dry_run_records_but_does_not_mutate
+    cfg = make_config(features: { sprint_start: { enabled: true } })
+    fields = [status_field(%w[Backlog Ready Done]), iteration_field([{ id: "it1", title: "2026-S08" }], [])]
+    parked = make_item([status_value("Backlog", "2026-05-01T00:00:00Z"), iteration_value("it1", "2026-S08")], { number: 1 })
+    ctx = make_ctx(make_graph(fields, [parked]), cfg, FakeClient.new, dry_run: true)
+
+    Boardly::Features::SprintStart.run(ctx)
+
+    assert_equal 0, ctx.client.single_selects.length
+    assert_equal 1, ctx.audit.count
+  end
+
   def test_stale_nudge_comments_and_mentions_assignees
     cfg = make_config(features: { stale_nudge: { enabled: true, rules: [{ status: "In Progress", days: 3, notify: "assignees" }] } })
     stale = make_item([status_value("In Progress", "2026-07-01T00:00:00Z")], { number: 5, assignees: ["alice"] })

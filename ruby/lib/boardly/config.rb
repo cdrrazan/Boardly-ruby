@@ -58,6 +58,11 @@ module Boardly
           add_sprint_label: truthy(f.dig(:rollover, :add_sprint_label) || f.dig(:rollover, :addSprintLabel)),
           sprint_label_color: validate_hex_color(f.dig(:rollover, :sprint_label_color) || f.dig(:rollover, :sprintLabelColor))
         },
+        sprint_start: {
+          enabled: truthy(f.dig(:sprint_start, :enabled) || f.dig(:sprintStart, :enabled)),
+          from_statuses: array_of_strings(f.dig(:sprint_start, :from_statuses) || f.dig(:sprintStart, :fromStatuses), default: ["Backlog"], path: "sprintStart.fromStatuses"),
+          to_status: (f.dig(:sprint_start, :to_status) || f.dig(:sprintStart, :toStatus) || "Ready").to_s
+        },
         stale_nudge: {
           enabled: truthy(f.dig(:stale_nudge, :enabled) || f.dig(:staleNudge, :enabled)),
           rules: validate_rules(f.dig(:stale_nudge, :rules) || f.dig(:staleNudge, :rules) || [])

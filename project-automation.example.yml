@@ -25,6 +25,12 @@ features:
     addSprintLabel: false     # also add a label named after the new iteration (e.g. "2026-S06") to each rolled card
     sprintLabelColor: "772fd1" # hex (no '#') used only if that label has to be created
 
+  # When a sprint becomes active, promote cards you pre-parked in it.
+  sprintStart:
+    enabled: false
+    fromStatuses: ["Backlog"] # statuses treated as "not started yet"
+    toStatus: "Ready"         # promote pre-parked cards to this status
+
   # Nudge owners when a card sits in a column too long.
   staleNudge:
     enabled: true
