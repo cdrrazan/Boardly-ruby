@@ -17,6 +17,16 @@ The first stable release: a config-driven Action with the core feature set plus 
 - ✅ Slack & email notifications
 - ✅ Audit trail → job summary + `dry-run`
 
+## ✅ Since v1.0 — Sprint lifecycle (on `main`, unreleased)
+
+Ported from the [main TypeScript project](https://github.com/cdrrazan/Boardly); see [CHANGELOG](./CHANGELOG.md#unreleased).
+
+- ✅ **Sprint start** — promote cards pre-parked in an iteration when it goes active, ignoring deliberate mid-sprint moves.
+- ✅ **Auto-assign by label** — CODEOWNERS-style `label → owner` map for unassigned tickets; never overrides an existing assignee.
+- ✅ **Sprint runway warning** — warn when too few future iterations are planned, before rollover and sprint-start run dry.
+- ✅ **Sprint label hygiene on rollover** — tag rolled cards with the new sprint's label and strip stale markers like `pulled-in`.
+- ✅ **Reviewer-aware nudges** — a `reviewers` notify token resolving to the card's *pending* review requests, with an assignee fallback.
+
 ## 🔭 v1.1 — Correctness & trust
 
 Making the existing features smarter and safer to adopt.
@@ -42,7 +52,7 @@ Ideas we like but haven't committed to. Feedback especially welcome here.
 - ✅ **Slack & email notifications** — delivered for digests, standups, and stale alerts. _(shipped)_
 - 💡 **More notification channels** — Discord and Microsoft Teams delivery.
 - 💡 **Lifecycle status sync** — auto-move cards as issues/PRs open, get reviewed, merge, or close.
-- 💡 **Auto-add + auto-triage** — add new issues/PRs to the project and set fields from label rules (round-robin assignment).
+- 💡 **Auto-add + auto-triage** — add new issues/PRs to the project and set fields from label rules. _(Label → assignee already shipped as auto-assign; this is the rest: board entry, field defaults, round-robin.)_
 - 💡 **WIP limits** — warn when a column exceeds N cards.
 - 💡 **SLA / time-in-status metrics** — flag cards exceeding a configured time in any column.
 - 💡 **Cross-project sync** — mirror an item's status across multiple boards.
