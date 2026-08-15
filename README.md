@@ -14,9 +14,9 @@ This repository is the **official Ruby port** of Boardly. It ships as a **Docker
 [![Website](https://img.shields.io/badge/Website-boardly--gh.pages.dev-6d8bff?logo=cloudflare&logoColor=white)](https://boardly-gh.pages.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Made with Ruby](https://img.shields.io/badge/Ruby-3.x-CC342D?logo=ruby&logoColor=white)](https://www.ruby-lang.org/)
-[![Docker action](https://img.shields.io/badge/GitHub%20Action-Docker-2496ED?logo=docker&logoColor=white)](./ruby/Dockerfile)
+[![Docker action](https://img.shields.io/badge/GitHub%20Action-Docker-2496ED?logo=docker&logoColor=white)](./Dockerfile)
 [![GitHub Projects v2](https://img.shields.io/badge/GitHub-Projects%20v2-181717?logo=github&logoColor=white)](https://docs.github.com/issues/planning-and-tracking-with-projects)
-[![Tests](https://img.shields.io/badge/tests-27%20passing-brightgreen.svg)](./ruby/test)
+[![Tests](https://img.shields.io/badge/tests-43%20passing-brightgreen.svg)](./ruby/test)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](./CONTRIBUTING.md)
 [![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red.svg)](./OPEN_SOURCE.md)
 
@@ -48,12 +48,15 @@ flowchart LR
     action -->|GraphQL| gh[(🗂️ GitHub Project v2)]
     gh --> action
     action --> f1[🔁 Rollover]
-    action --> f2[🔔 Stale nudges]
-    action --> f3[🧩 Sub-issue gate]
-    action --> f4[🏁 Digest]
-    action --> f5[🗓️ Standup]
-    action --> f6[🔼 Priority sort]
-    f1 & f2 & f3 & f4 & f5 & f6 --> audit[[📋 Audit trail → Job Summary]]
+    action --> f2[▶️ Sprint start]
+    action --> f3[👤 Auto-assign]
+    action --> f4[🛬 Sprint runway]
+    action --> f5[🔔 Stale nudges]
+    action --> f6[🧩 Sub-issue gate]
+    action --> f7[🏁 Digest]
+    action --> f8[🗓️ Standup]
+    action --> f9[🔼 Priority sort]
+    f1 & f2 & f3 & f4 & f5 & f6 & f7 & f8 & f9 --> audit[[📋 Audit trail → Job Summary]]
 ```
 
 ## 🚀 Features
@@ -263,10 +266,11 @@ The Ruby port lives in [`ruby/`](./ruby) and is self-contained — see [`ruby/RE
 ## 🛠️ Development
 
 ```bash
-cd ruby
-bundle install
-bundle exec rake test          # Minitest suite (27 tests)
-docker build -t Boardly-ruby .   # build the action image
+cd ruby && bundle install
+bundle exec rake test              # Minitest suite (43 tests), from ruby/
+
+cd ..                              # the action image builds from the repo root,
+docker build -t boardly-ruby .     # where action.yml and the Dockerfile live
 ```
 
 **Built with:** Ruby 3.3 · standard library (HTTP/JSON/YAML) · `mail` gem (SMTP) · Minitest — see the full [**Tech Stack**](./TECH_STACK.md) and [**Architecture**](./docs/ARCHITECTURE.md).

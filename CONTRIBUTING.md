@@ -25,13 +25,13 @@ Requires **Ruby ≥ 3.1** (the action image pins `ruby:3.3`).
 
 ### Everyday commands
 
-Run these from the [`ruby/`](./ruby) folder.
+Run the Ruby commands from the [`ruby/`](./ruby) folder; build the image from the **repo root**, where `action.yml` and the `Dockerfile` live.
 
-| Command | What it does |
-|---------|--------------|
-| `bundle exec rake test` | Run the Minitest suite (27 tests) |
-| `ruby -Ilib -Itest test/features_test.rb` | Run a single test file |
-| `docker build -t boardly-ruby .` | Build the Docker action image |
+| Command | Run from | What it does |
+|---------|----------|--------------|
+| `bundle exec rake test` | `ruby/` | Run the Minitest suite (43 tests) |
+| `ruby -Ilib -Itest test/features_test.rb` | `ruby/` | Run a single test file |
+| `docker build -t boardly-ruby .` | repo root | Build the Docker action image — what `uses: cdrrazan/Boardly-ruby@v1` runs |
 
 ## Project layout
 

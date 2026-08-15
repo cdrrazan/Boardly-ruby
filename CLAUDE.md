@@ -8,7 +8,7 @@ Boardly is a config-driven GitHub Action that automates **GitHub Projects (v2)**
 
 This repository holds **two implementations of the same tool**:
 
-- **`ruby/`** — the **Ruby port**, and the thing this repo actually ships. It is a **Docker container action** (`ruby/action.yml` → `ruby/Dockerfile`). Almost all work happens here.
+- **`ruby/`** — the **Ruby port**, and the thing this repo actually ships. Almost all work happens here. It is a **Docker container action**, but its manifest and image build live at the **repo root** (`action.yml` → `Dockerfile`, whose `COPY` paths are `ruby/`-prefixed) — that is what makes `uses: cdrrazan/Boardly-ruby@v1` resolve to the Ruby port rather than the TypeScript reference.
 - **root `src/`** (TypeScript, `dist/`, `package.json`, `tsconfig.json`) — the **upstream TypeScript original**, kept for reference and parity. The Ruby port is deliberately **byte-for-byte config-compatible** with it. Change TS only when explicitly porting a feature or checking parity; the canonical upstream lives at `github.com/cdrrazan/Boardly`.
 
 When a task says "Boardly" without qualification, assume **`ruby/`**.
@@ -23,7 +23,12 @@ rake test                            # run all tests (minitest)
 rake                                 # default task == test
 ruby -Ilib -Itest test/config_test.rb          # run a single test file
 ruby -Ilib -Itest test/config_test.rb -n /slack/   # single test by name pattern
-docker build -t boardly-ruby .       # build the container action image
+```
+
+Build the action image from the **repo root** (not `ruby/`) — that's where `action.yml` and the `Dockerfile` live, and the build context must match:
+
+```bash
+docker build -t boardly-ruby .       # from the repo root
 ```
 
 There is **no lint/format tool wired up** and **no `.gemspec`** — this is a script-style app run via `bin/boardly`, not a published gem. Tests are **Minitest**, not RSpec (unusual for this owner — do not "fix" it to RSpec).

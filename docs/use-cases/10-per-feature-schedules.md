@@ -49,7 +49,7 @@ jobs:
 
 ## What happens
 
-Each job runs exactly one feature. Valid `only` values: `rollover`, `stale-nudge`, `sub-issue-gate`, `digest`, `standup`, `priority-sort`.
+Each job runs exactly one feature. Valid `only` values: `rollover`, `sprint-start`, `sprint-runway`, `auto-assign`, `stale-nudge`, `sub-issue-gate`, `digest`, `standup`, `priority-sort`.
 
 ## Tips
 

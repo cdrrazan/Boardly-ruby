@@ -59,7 +59,7 @@ Config lives in `.github/project-automation.yml` — see [`project-automation.ex
 |-------|---------|-------------|
 | `token` | — _(required)_ | Token with `project` + `issues` access. |
 | `config-path` | `.github/project-automation.yml` | Path to the config file. |
-| `only` | `""` | Run one feature: `rollover`, `stale-nudge`, `sub-issue-gate`, `digest`, `standup`, `priority-sort`. |
+| `only` | `""` | Run one feature: `rollover`, `sprint-start`, `sprint-runway`, `auto-assign`, `stale-nudge`, `sub-issue-gate`, `digest`, `standup`, `priority-sort`. |
 | `dry-run` | `false` | Log intended actions without making changes. |
 
 **Output:** `actions-count`.
@@ -78,7 +78,7 @@ lib/
     util/                 # dates + field accessors
     audit.rb              # job-summary audit trail
 bin/boardly               # container entrypoint
-test/                     # Minitest specs + fake client/channel (27 tests)
+test/                     # Minitest specs + fake client/channel (43 tests)
 ```
 
 **Stack:** Ruby 3.3, standard library for HTTP/JSON/YAML, `mail` gem for SMTP, Minitest for tests. No web framework, minimal dependencies.
@@ -86,10 +86,11 @@ test/                     # Minitest specs + fake client/channel (27 tests)
 ## Development
 
 ```bash
-cd ruby
-bundle install
-bundle exec rake test          # or: ruby -Ilib -Itest test/features_test.rb
-docker build -t boardly-ruby .   # build the action image
+cd ruby && bundle install
+bundle exec rake test              # or: ruby -Ilib -Itest test/features_test.rb
+
+cd ..                              # the image builds from the repo root, where
+docker build -t boardly-ruby .     # action.yml and the Dockerfile now live
 ```
 
 ## Notes vs. the TypeScript edition

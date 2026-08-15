@@ -9,13 +9,13 @@ This repository is the **Ruby edition** of Boardly — the official Ruby port of
 | Layer | Choice | Notes |
 |-------|--------|-------|
 | Language | **Ruby 3.x** (`frozen_string_literal`) | Targets Ruby ≥ 3.1; the action image pins `ruby:3.3` |
-| Runtime | **Docker container action** | Ships as a Docker action (`ruby/action.yml` → `ruby/Dockerfile`); Linux runners only |
+| Runtime | **Docker container action** | Ships as a Docker action (root `action.yml` → root `Dockerfile`, building `ruby/`); Linux runners only |
 | GitHub API | **`Net::HTTP`** (stdlib) | Projects v2 via GraphQL; issues/comments via REST — no Octokit dependency |
 | Action I/O | Environment variables + job-summary file | Inputs mapped to `BOARDLY_*` env vars; audit trail written to `$GITHUB_STEP_SUMMARY` |
 | Config | **YAML** (stdlib `yaml`) with a hand-written validator | One `.github/project-automation.yml`, mirroring the TS zod schema |
 | Email | **`mail`** gem | SMTP delivery for digests/standups/alerts |
 | Slack | **`Net::HTTP`** | Incoming Webhook POST |
-| Tests | **Minitest** | 27 unit tests against a fake client/channel |
+| Tests | **Minitest** | 43 unit tests against a fake client/channel |
 | Task runner | **Rake** | `rake test` |
 
 **Source layout** (in [`ruby/`](./ruby))
