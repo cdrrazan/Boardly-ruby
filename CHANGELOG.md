@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+- **Sprint start** — when an iteration becomes active, promote cards pre-parked in it (e.g. `Backlog → Ready`). Only cards parked *before* the sprint started are touched, so a deliberate mid-sprint move back is respected.
+- **Auto-assign by label** — a CODEOWNERS-style `label → owner` map assigns unassigned tickets in a given status. Opt-in, case-insensitive matching, and it never overrides an existing assignee.
+- **Sprint runway warning** — GitHub never auto-creates iterations, so Boardly warns (job summary + workflow annotation) when too few future sprints are planned, before rollover and sprint-start run dry.
+- **Sprint label hygiene on rollover** — `addSprintLabel` tags each rolled card with the new sprint's label (creating it once per repo if missing), and `removeLabels` strips stale markers like `pulled-in` as the card carries over.
+- **`reviewers` notify token for stale nudges** — resolves to the *pending* review requests on the card's PR (or the PR that closes the issue), falling back to the assignees when no review is outstanding. Works bare or mixed into a `notify:` list alongside literal logins.
+- New `only:` values for the added features: `sprint-start`, `sprint-runway`, `auto-assign`.
+
+### Changed
+- **The Ruby action now ships from the repo root.** `action.yml` and the `Dockerfile` moved out of `ruby/`, so the documented `uses: cdrrazan/Boardly-ruby@v1` resolves to the Ruby container action. That reference previously resolved to the root *TypeScript* manifest — the parity reference, not the port this repo exists for. Ruby sources still live in `ruby/`; the image now builds from the repo root with `ruby/`-prefixed paths.
+
+### Documentation
+- Three new use-case recipes — [14 · Sprint start](./docs/use-cases/14-sprint-start.md), [15 · Auto-assign](./docs/use-cases/15-auto-assign.md), [16 · Sprint runway](./docs/use-cases/16-sprint-runway.md) — bringing the cookbook to 16.
+- A worked end-to-end sample under [`examples/`](./examples) — a full config plus the workflow that runs it, with Slack and email enabled.
+- Marketing site refreshed: eleven automations, the reviewer-aware nudge story, and an animated config walkthrough.
+
+### Tooling
+- **CI** — a `.github/` that runs the Minitest suite, builds *and boots* the action image, keeps the TypeScript reference in sync, gates pull requests behind an aggregate "PR ready to merge" check, lints PR titles, and moves the `v1` alias on release. Plus issue/PR templates and funding links.
+- Minitest suite grown to 43 tests, covering the new features and their dry-run paths.
 
 ## [1.0.0] — 2026-07-09
 
