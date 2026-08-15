@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Pull requests are gated by the dedicated "PR checks" workflow.
+
+permissions:
+  contents: read
+
+jobs:
+  ruby:
+    name: Ruby · Minitest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruby
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: ruby
+
+      - name: Test
+        run: bundle exec rake test
+
+  image:
+    name: Docker · Action image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The action manifest lives at the repo root, so the image builds from the
+      # repo root with `ruby/`-prefixed sources. Building here is what proves
+      # `uses: cdrrazan/Boardly-ruby@v1` will start.
+      - name: Build the action image
+        run: docker build -t boardly-ruby:ci .
+
+      - name: Smoke-test the entrypoint
+        run: |
+          # No token, so the run must fail — but it must fail *from Boardly*,
+          # having loaded lib/, not from a missing file or a Ruby syntax error.
+          output="$(docker run --rm boardly-ruby:ci 2>&1 || true)"
+          echo "$output"
+          if echo "$output" | grep -q "token input is required"; then
+            echo "✅ Entrypoint booted and reached Boardly's own token check."
+          else
+            echo "::error::The image did not boot into Boardly. Output above."
+            exit 1
+          fi
+
+  typescript:
+    name: TypeScript reference · Typecheck · Test · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify dist/ is in sync with src/
+        run: |
+          if [ -n "$(git status --porcelain dist)" ]; then
+            echo "::error::dist/ is out of date. Run 'npm run build' and commit the result."
+            git --no-pager diff -- dist
+            exit 1
+          fi

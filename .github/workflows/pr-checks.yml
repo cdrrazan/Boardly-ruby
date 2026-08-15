@@ -1,0 +1,121 @@
+# Gate every pull request before it can be merged. Mark the aggregate
+# "PR ready to merge" job as a required status check in branch protection so a
+# PR can only merge when the Ruby suite passes, the action image builds and
+# boots, the TypeScript reference stays in sync, and there are no merge
+# conflicts with the base branch.
+name: PR checks
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+# Cancel superseded runs when a PR is pushed to again.
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  ruby:
+    name: Ruby · Minitest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruby
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: ruby
+
+      - name: Test
+        run: bundle exec rake test
+
+  image:
+    name: Docker · Action image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the action image
+        run: docker build -t boardly-ruby:pr .
+
+      - name: Smoke-test the entrypoint
+        run: |
+          # No token, so the run must fail — but it must fail *from Boardly*,
+          # having loaded lib/, not from a missing file or a Ruby syntax error.
+          output="$(docker run --rm boardly-ruby:pr 2>&1 || true)"
+          echo "$output"
+          if echo "$output" | grep -q "token input is required"; then
+            echo "✅ Entrypoint booted and reached Boardly's own token check."
+          else
+            echo "::error::The image did not boot into Boardly. Output above."
+            exit 1
+          fi
+
+  typescript:
+    name: TypeScript reference · Typecheck · Test · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify dist/ is in sync with src/
+        run: |
+          if [ -n "$(git status --porcelain dist)" ]; then
+            echo "::error::dist/ is out of date. Run 'npm run build' and commit the result."
+            git --no-pager diff -- dist
+            exit 1
+          fi
+
+  merge-conflicts:
+    name: No merge conflicts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Test-merge the base branch
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git config user.name "boardly-ci"
+          git config user.email "ci@boardly.local"
+          git fetch --no-tags origin "$BASE"
+          if git merge --no-commit --no-ff "origin/$BASE"; then
+            git merge --abort || true
+            echo "✅ No merge conflicts with '$BASE'."
+          else
+            git merge --abort || true
+            echo "::error::This PR has merge conflicts with '$BASE'. Rebase or merge '$BASE' and resolve them."
+            exit 1
+          fi
+
+  pr-ready:
+    name: PR ready to merge
+    runs-on: ubuntu-latest
+    needs: [ruby, image, typescript, merge-conflicts]
+    steps:
+      - run: echo "✅ All PR checks passed — Ruby tests, action image, TypeScript parity, and no merge conflicts."

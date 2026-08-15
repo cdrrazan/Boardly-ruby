@@ -1,0 +1,42 @@
+# Keeps the moving major-version tag (e.g. `v1`) pointed at the latest release,
+# so consumers who pin `uses: cdrrazan/Boardly-ruby@v1` always get the newest v1.x.
+#
+# On every published, non-pre-release tag of the form vMAJOR.MINOR.PATCH, this
+# (re)creates `vMAJOR` at the released commit. Publishing v1.0.0 creates v1;
+# publishing v1.1.0 later moves v1 forward.
+name: Update major tag
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  major-tag:
+    # Skip pre-releases — the major alias should track stable releases only.
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Move the major tag to this release
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$TAG" =~ ^v([0-9]+)\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::notice::'$TAG' is not a stable vMAJOR.MINOR.PATCH tag — leaving the major tag untouched."
+            exit 0
+          fi
+          MAJOR="v${BASH_REMATCH[1]}"
+          SHA="$(git rev-list -n 1 "$TAG")"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f "$MAJOR" "$SHA"
+          git push origin "refs/tags/$MAJOR" --force
+          echo "::notice::Moved $MAJOR → $SHA (from release $TAG)"

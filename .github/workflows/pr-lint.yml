@@ -1,0 +1,49 @@
+# Lightweight, fast PR hygiene checks — kept separate from the heavy build so a
+# title tweak or label change doesn't re-run tests or rebuild the image. No
+# third-party actions.
+#
+# The title check is blocking (the author controls it); the label check is
+# advisory (external contributors can't self-label). Mark "Lint PR title &
+# labels" as a required status check if you want the title rule enforced.
+name: PR lint
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-lint-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint PR title & labels
+    runs-on: ubuntu-latest
+    steps:
+      - name: Title follows Conventional Commits
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "Title: $TITLE"
+          pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9 ._/-]+\))?!?: .+'
+          if [[ ! "$TITLE" =~ $pattern ]]; then
+            echo "::error::PR title must follow Conventional Commits."
+            echo "Examples: 'feat: add Slack channel', 'fix(config): handle missing field', 'docs: update README'."
+            echo "Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert."
+            exit 1
+          fi
+          echo "✅ Title follows Conventional Commits."
+
+      - name: Labels present (advisory)
+        env:
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          count=$(echo "$LABELS" | jq 'length')
+          if [ "$count" -eq 0 ]; then
+            echo "::warning::This PR has no labels yet — a maintainer should add one (e.g. bug, enhancement, documentation) to triage it."
+          else
+            echo "✅ Labels: $(echo "$LABELS" | jq -r 'join(", ")')"
+          fi
