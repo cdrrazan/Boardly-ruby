@@ -53329,9 +53329,13 @@ async function runStaleNudge(ctx) {
         });
     }
 }
+// `notify` is either the literal "assignees" or a list of logins. Inside the
+// list, an "assignees" entry expands to the item's assignees, so a rule can ping
+// assignees *and* extra people (a reviewer, a project manager, …):
+//   notify: [assignees, project-manager, some-reviewer]
 function resolveMentions(notify, assignees) {
-    const logins = notify === "assignees" ? assignees : notify;
-    return logins.map((l) => `@${l.replace(/^@/, "")}`).join(" ");
+    const logins = notify === "assignees" ? assignees : notify.flatMap((l) => (l === "assignees" ? assignees : l));
+    return [...new Set(logins.map((l) => `@${l.replace(/^@/, "")}`))].join(" ");
 }
 function fill(template, vars) {
     return template.replace(/\{(\w+)\}/g, (_, key) => (key in vars ? String(vars[key]) : `{${key}}`));
