@@ -8,13 +8,14 @@ RUN apt-get update \
 
 WORKDIR /app
 
-# Install gems first for better layer caching.
-COPY Gemfile ./
+# The build context is the repo root — that's where `action.yml` lives — so every
+# source path is prefixed with `ruby/`. Gems install first for layer caching.
+COPY ruby/Gemfile ./
 RUN gem install bundler --no-document \
     && bundle config set --local without 'development' \
     && bundle install
 
-COPY lib ./lib
-COPY bin ./bin
+COPY ruby/lib ./lib
+COPY ruby/bin ./bin
 
 ENTRYPOINT ["ruby", "/app/bin/boardly"]

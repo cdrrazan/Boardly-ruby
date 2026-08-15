@@ -1,0 +1,20 @@
+# The Docker build context is the repo root. Keep it to the Ruby sources the
+# image actually needs — everything else is docs, tests, or the TypeScript
+# reference edition.
+.git
+.github
+.ruby-lsp
+node_modules
+dist
+src
+test
+web
+docs
+examples
+ruby/test
+ruby/examples
+ruby/Rakefile
+*.md
+*.json
+tsconfig.json
+.gitignore
