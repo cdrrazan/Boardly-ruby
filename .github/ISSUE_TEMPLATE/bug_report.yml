@@ -1,0 +1,41 @@
+name: 🐛 Bug report
+description: Report a problem with Boardly (Ruby edition)
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug! ⚠️ **Never include tokens, secrets, or PATs** in this report.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce it? Include the feature involved (rollover, stale-nudge, …).
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Config (redacted)
+      description: Your `project-automation.yml`, with any secrets removed.
+      render: yaml
+  - type: input
+    id: version
+    attributes:
+      label: Boardly-ruby version / tag
+      placeholder: "e.g. v1.0.0 or a commit SHA"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Run logs / audit trail
+      description: Relevant job-summary rows or workflow log output (redact secrets).
+      render: shell

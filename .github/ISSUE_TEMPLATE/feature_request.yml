@@ -1,0 +1,31 @@
+name: 💡 Feature request
+description: Suggest an idea for Boardly (Ruby edition)
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What workflow are you trying to automate?
+      description: Describe the board pain-point or manual process you'd like Boardly to handle.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should Boardly do? A config sketch is very welcome.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I've checked the [ROADMAP](../blob/main/ROADMAP.md) and this isn't already planned.
+          required: true
+        - label: I understand features are usually driven in the [main TypeScript project](https://github.com/cdrrazan/Boardly) and ported here — filing there too is welcome.
+          required: false
+        - label: I've searched existing issues for duplicates.
+          required: true

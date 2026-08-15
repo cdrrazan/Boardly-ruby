@@ -1,0 +1,43 @@
+# Example consumer workflow. Copy into a repo that uses Boardly.
+#
+# The default GITHUB_TOKEN usually cannot read org Projects, so store a
+# fine-grained PAT (or GitHub App token) with `project` + `issues` scopes as the
+# `PROJECT_AUTOMATION_TOKEN` secret.
+name: Project automation
+
+on:
+  schedule:
+    # Daily standup at 08:00 UTC on weekdays.
+    - cron: "0 8 * * 1-5"
+    # Hourly stale-nudge + sub-issue gate + priority sort.
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Run a single feature"
+        required: false
+        default: ""
+      dry-run:
+        description: "Log actions without applying them"
+        required: false
+        default: "false"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  automate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cdrrazan/Boardly-ruby@v1
+        with:
+          token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
+          config-path: .github/project-automation.yml
+          only: ${{ github.event.inputs.only }}
+          dry-run: ${{ github.event.inputs.dry-run || 'false' }}
+        # Optional: only needed if you enable Slack/email notifications.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}

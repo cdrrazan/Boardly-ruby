@@ -1,0 +1,9 @@
+# Enables the "Sponsor" button on the GitHub repository.
+# Replace the usernames below with your own funding handles, or remove any
+# platform you don't use. Docs: https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+
+github: [cdrrazan]                 # GitHub Sponsors username(s)
+buy_me_a_coffee: cdrrazan          # https://www.buymeacoffee.com/cdrrazan
+ko_fi: cdrrazan                    # https://ko-fi.com/cdrrazan
+custom:                            # Any other donation URLs
+  - "https://www.paypal.me/cdrrazan"
