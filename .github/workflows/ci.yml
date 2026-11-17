@@ -17,7 +17,7 @@ jobs:
       run:
         working-directory: ruby
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -32,7 +32,7 @@ jobs:
     name: Docker · Action image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # The action manifest lives at the repo root, so the image builds from the
       # repo root with `ruby/`-prefixed sources. Building here is what proves
@@ -57,11 +57,11 @@ jobs:
     name: TypeScript reference · Typecheck · Test · Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
