@@ -1,4 +1,4 @@
-FROM ruby:3.3-slim
+FROM ruby:3.4-slim
 
 # ca-certificates for TLS (GitHub API + SMTP); build-essential not needed for the
 # pure-Ruby `mail` gem.

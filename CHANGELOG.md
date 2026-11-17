@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minitest suite grown to 43 tests, covering the new features and their dry-run paths.
 - **Dependency refresh** — `Gemfile.lock` picks up patch/minor updates to the `mail` gem's transitive deps (`net-smtp` 0.5.2, `net-protocol` 0.4.0, `net-imap` 0.6.8, `date` 3.6.0) and now records gem checksums.
 - **CI runtime refresh** — workflows move to `actions/checkout@v5` and `actions/setup-node@v5` (Node 24 action runtime), and the TypeScript reference job runs on Node 22 LTS now that Node 20 is end-of-life.
+- **Ruby 3.4 runtime** — the action image now builds from `ruby:3.4-slim` (was `ruby:3.3-slim`), and CI tests on Ruby 3.4 to match. The supported floor stays Ruby ≥ 3.1.
 
 ## [1.0.0] — 2026-07-09
 

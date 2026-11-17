@@ -254,7 +254,7 @@ Both editions are functionally equivalent and read the same config. They differ 
 | | 💎 This repo — [`cdrrazan/Boardly-ruby`](https://github.com/cdrrazan/Boardly-ruby) | ⬆️ Main repo — [`cdrrazan/Boardly`](https://github.com/cdrrazan/Boardly) |
 |--|--|--|
 | Language | Ruby 3.x | TypeScript (strict) |
-| Runtime | **Docker container action** (`ruby:3.3` image) | **`node20`** bundled action |
+| Runtime | **Docker container action** (`ruby:3.4` image) | **`node20`** bundled action |
 | Runner OS | Linux only | Any (Linux/macOS/Windows) |
 | HTTP | `Net::HTTP` (stdlib) | `@octokit/graphql` + `@actions/github` |
 | Dependencies | stdlib + `mail` gem | `@actions/*`, `zod`, `js-yaml`, … |
@@ -273,7 +273,7 @@ cd ..                              # the action image builds from the repo root,
 docker build -t boardly-ruby .     # where action.yml and the Dockerfile live
 ```
 
-**Built with:** Ruby 3.3 · standard library (HTTP/JSON/YAML) · `mail` gem (SMTP) · Minitest — see the full [**Tech Stack**](./TECH_STACK.md) and [**Architecture**](./docs/ARCHITECTURE.md).
+**Built with:** Ruby 3.4 · standard library (HTTP/JSON/YAML) · `mail` gem (SMTP) · Minitest — see the full [**Tech Stack**](./TECH_STACK.md) and [**Architecture**](./docs/ARCHITECTURE.md).
 
 ## 🗺️ Roadmap
 

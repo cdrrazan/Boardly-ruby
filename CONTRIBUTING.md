@@ -21,7 +21,7 @@ cd boardly-ruby/ruby
 bundle install
 ```
 
-Requires **Ruby ≥ 3.1** (the action image pins `ruby:3.3`).
+Requires **Ruby ≥ 3.1** (the action image pins `ruby:3.4`).
 
 ### Everyday commands
 

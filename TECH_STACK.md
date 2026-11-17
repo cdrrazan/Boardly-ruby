@@ -8,7 +8,7 @@ This repository is the **Ruby edition** of Boardly — the official Ruby port of
 
 | Layer | Choice | Notes |
 |-------|--------|-------|
-| Language | **Ruby 3.x** (`frozen_string_literal`) | Targets Ruby ≥ 3.1; the action image pins `ruby:3.3` |
+| Language | **Ruby 3.x** (`frozen_string_literal`) | Targets Ruby ≥ 3.1; the action image pins `ruby:3.4` |
 | Runtime | **Docker container action** | Ships as a Docker action (root `action.yml` → root `Dockerfile`, building `ruby/`); Linux runners only |
 | GitHub API | **`Net::HTTP`** (stdlib) | Projects v2 via GraphQL; issues/comments via REST — no Octokit dependency |
 | Action I/O | Environment variables + job-summary file | Inputs mapped to `BOARDLY_*` env vars; audit trail written to `$GITHUB_STEP_SUMMARY` |

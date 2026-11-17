@@ -2,7 +2,7 @@
 
 A **full-Ruby** port of [Boardly](https://github.com/cdrrazan/Boardly) — a config-driven GitHub Action that automates **GitHub Projects (v2)**: sprint rollover, stale-card nudges, sub-issue gating, digests, standups, priority sorting, and Slack/email notifications, all from one YAML file.
 
-Because GitHub Actions has no native Ruby runtime, this ships as a **Docker container action** (a `ruby:3.3` image). Behaviour and config are identical to the TypeScript version, which is the main project — both editions are actively maintained.
+Because GitHub Actions has no native Ruby runtime, this ships as a **Docker container action** (a `ruby:3.4` image). Behaviour and config are identical to the TypeScript version, which is the main project — both editions are actively maintained.
 
 > This folder is self-contained: copy its contents to the root of a new repository to publish it as its own action. In this repository it is published as [`cdrrazan/boardly-ruby`](https://github.com/cdrrazan/boardly-ruby).
 
@@ -81,7 +81,7 @@ bin/boardly               # container entrypoint
 test/                     # Minitest specs + fake client/channel (43 tests)
 ```
 
-**Stack:** Ruby 3.3, standard library for HTTP/JSON/YAML, `mail` gem for SMTP, Minitest for tests. No web framework, minimal dependencies.
+**Stack:** Ruby 3.4, standard library for HTTP/JSON/YAML, `mail` gem for SMTP, Minitest for tests. No web framework, minimal dependencies.
 
 ## Development
 
